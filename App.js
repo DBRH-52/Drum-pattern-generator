@@ -81,22 +81,22 @@ function App() {
           // If the cell is true (active), play the note at the corresponding time
           if (cell) {
             // Calculate when to play the note
-            const noteTime = time + column_index * (Tone.Time("8n").toSeconds()); 
-            sampler.triggerAttackRelease(note, "8n", noteTime); 
+            const note_time = time + column_index * (Tone.Time("8n").toSeconds()); 
+            sampler.triggerAttackRelease(note, "8n", note_time); 
             // Trigger the sound to play for an 8th note duration
-            console.log(`Playing note: ${note} at time: ${noteTime}`);
+            console.log(`Playing note: ${note} at time: ${note_time}`);
           }
         });
       });
     };
 
     // Create a Tone.Loop to run the loopFunction every 1 bar (1 measure)
-    const newLoop = new Tone.Loop(play_notes_pattern_loop, "1m");
+    const run_pattern_1_bar_loop = new Tone.Loop(play_notes_pattern_loop, "1m");
     // Store the loop instance in state
-    set_loop(newLoop); 
+    set_loop(run_pattern_1_bar_loop); 
 
     // Start the loop immediately
-    newLoop.start(0); 
+    run_pattern_1_bar_loop.start(0); 
     // Start the Tone.Transport to sync everything
     Tone.Transport.start(); 
     // Update state to indicate playback is active
