@@ -3,7 +3,7 @@ import * as Tone from "tone";
 
 function App() {
   // State to manage the grid pattern (5 drum parts, 16 steps)
-  const [pattern, setPattern] = useState([
+  const [pattern, set_pattern] = useState([
     [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], // Tom1
     [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], // Kick
     [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], // Snare
@@ -12,10 +12,20 @@ function App() {
   ]);
 
   // State to manage playback status (whether the loop is playing or not)
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [is_playing, set_is_playing] = useState(false);
 
   // Store the loop instance for stopping later
-  const [loop, setLoop] = useState(null);
+  const [loop, set_loop] = useState(null);
+
+  // Dark mode state (initialized from localStorage)
+  const [dark_mode, set_dark_mode] = useState(
+    localStorage.getItem("dark_mode") === "true"
+  );
+
+  // Save dark mode preference to localStorage
+  useEffect(() => {
+    localStorage.setItem("dark_mode", dark_mode);
+  }, [dark_mode]);
 
   useEffect(() => {
     // Preload sounds when the app starts
@@ -30,19 +40,19 @@ function App() {
   }, []);
 
   // Toggle a cell in a grid for editing the pattern
-  const toggleCell = (rowIndex, colIndex) => {
+  const toggle_grid_cell = (row_index, column_index) => {
     // Update the pattern by flipping the value of the clicked cell
-    const updatedPattern = pattern.map((row, rIndex) =>
-      row.map((cell, cIndex) =>
-        rIndex === rowIndex && cIndex === colIndex ? !cell : cell
+    const updated_pattern = pattern.map((row, row_idx) =>
+      row.map((cell, column_idx) =>
+        row_idx === row_index && column_idx === column_index ? !cell : cell
       )
     );
     // Set the updated pattern in state
-    setPattern(updatedPattern); 
+    set_pattern(updated_pattern); 
   };
 
   // Function to start playback of the loop
-  const startPlayback = async () => {
+  const start_playback = async () => {
     await Tone.start(); // Ensure Tone.js is started
     console.log("Tone.js context started");
 
@@ -63,15 +73,15 @@ function App() {
     console.log("Sounds loaded successfully!");
 
     // Loop function that will play notes based on the pattern
-    const loopFunction = (time) => {
-      pattern.forEach((row, rowIndex) => {
+    const play_notes_pattern_loop = (time) => {
+      pattern.forEach((row, row_index) => {
         // Map each row to a different note (tom, kick, snare, hi-hat, crash)
-        const note = ["A1" ,"C1", "D1", "E1", "C2"][rowIndex]; 
-        row.forEach((cell, colIndex) => {
+        const note = ["A1" ,"C1", "D1", "E1", "C2"][row_index]; 
+        row.forEach((cell, column_index) => {
           // If the cell is true (active), play the note at the corresponding time
           if (cell) {
             // Calculate when to play the note
-            const noteTime = time + colIndex * (Tone.Time("8n").toSeconds()); 
+            const noteTime = time + column_index * (Tone.Time("8n").toSeconds()); 
             sampler.triggerAttackRelease(note, "8n", noteTime); 
             // Trigger the sound to play for an 8th note duration
             console.log(`Playing note: ${note} at time: ${noteTime}`);
@@ -81,54 +91,77 @@ function App() {
     };
 
     // Create a Tone.Loop to run the loopFunction every 1 bar (1 measure)
-    const newLoop = new Tone.Loop(loopFunction, "1m");
+    const newLoop = new Tone.Loop(play_notes_pattern_loop, "1m");
     // Store the loop instance in state
-    setLoop(newLoop); 
+    set_loop(newLoop); 
 
     // Start the loop immediately
     newLoop.start(0); 
     // Start the Tone.Transport to sync everything
     Tone.Transport.start(); 
     // Update state to indicate playback is active
-    setIsPlaying(true); 
+    set_is_playing(true); 
   };
 
   // Function to stop playback of the loop
-  const stopPlayback = () => {
+  const stop_playback = () => {
     if (loop) {
       // Stop the loop
       loop.stop(); 
       // Clean up the loop instance
       loop.dispose(); 
       // Reset the loop state
-      setLoop(null); 
+      set_loop(null); 
     }
     // Stop the transport (which controls timing)
     Tone.Transport.stop(); 
     // Update state to indicate playback is stopped
-    setIsPlaying(false); 
+    set_is_playing(false); 
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
+    <div
+      style={{
+        textAlign: "center",
+        padding: "20px",
+        backgroundColor: dark_mode ? "#121212" : "#ffffff",
+        color: dark_mode ? "#ffffff" : "#000000",
+        minHeight: "100vh",
+        transition: "background 0.3s ease",
+      }}
+    >
+      <button
+        onClick={() => set_dark_mode(!dark_mode)}
+        style={{
+          marginBottom: "20px",
+          padding: "10px 20px",
+          cursor: "pointer",
+          backgroundColor: dark_mode ? "#444" : "#ccc",
+          color: dark_mode ? "#fff" : "#000",
+          border: "none",
+          borderRadius: "5px",
+        }}
+      >
+        Toggle Dark Mode
+      </button>
+
       <h1>Custom Drum Machine</h1>
 
-      {/* labels - left ; grid - right */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-        {/* Labels - left */}
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", height: "230px", marginRight: "10px" }}>
+        <div style={{ display: "flex", flexDirection: "column", marginRight: "10px" }}>
           {["Tom1", "Kick", "Snare", "Hi-hat", "Crash"].map((label, index) => (
             <div
               key={index}
               style={{
-                width: "80px", 
-                height: "40px", 
+                width: "80px",
+                height: "40px",
                 margin: "2px",
                 textAlign: "center",
                 fontWeight: "bold",
                 border: "1px solid black",
                 padding: "5px",
-                backgroundColor: "#f0f0f0",
+                backgroundColor: dark_mode ? "#444" : "#ccc",
+                color: dark_mode ? "#fff" : "#000",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -138,20 +171,19 @@ function App() {
             </div>
           ))}
         </div>
-        
-        {/* Grid - right */}
+
         <div style={{ display: "inline-block", margin: "20px" }}>
-          {pattern.map((row, rowIndex) => (
-            <div key={rowIndex} style={{ display: "flex" }}>
-              {row.map((cell, colIndex) => (
+          {pattern.map((row, row_index) => (
+            <div key={row_index} style={{ display: "flex" }}>
+              {row.map((cell, col_index) => (
                 <div
-                  key={colIndex}
-                  onClick={() => toggleCell(rowIndex, colIndex)} 
+                  key={col_index}
+                  onClick={() => toggle_grid_cell(row_index, col_index)}
                   style={{
-                    width: "40px", 
-                    height: "40px", 
+                    width: "40px",
+                    height: "40px",
                     margin: "2px",
-                    backgroundColor: cell ? "green" : "lightgray", // Highlight active cells
+                    backgroundColor: col_index === current_step ? "yellow" : cell ? "green" : "lightgray",
                     border: "1px solid black",
                     cursor: "pointer",
                   }}
@@ -162,20 +194,19 @@ function App() {
         </div>
       </div>
 
-      {/* play/stop button */}
       <button
-        onClick={isPlaying ? stopPlayback : startPlayback} 
+        onClick={is_playing ? stop_playback : start_playback}
         style={{
           marginTop: "20px",
           padding: "10px 20px",
           cursor: "pointer",
-          backgroundColor: isPlaying ? "red" : "blue", 
+          backgroundColor: is_playing ? "red" : "blue",
           color: "white",
           border: "none",
           borderRadius: "5px",
         }}
       >
-        {isPlaying ? "Stop" : "Play"} {/* button text based on playback status */}
+        {is_playing ? "Stop" : "Play"}
       </button>
     </div>
   );
