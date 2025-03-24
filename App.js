@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as Tone from "tone";
 
 function App() {
-  // State to manage the grid pattern (5 rows for 5 drum parts, 16 columns for 16 steps)
+  // State to manage the grid pattern (5 drum parts, 16 steps)
   const [pattern, setPattern] = useState([
     [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], // Tom1
     [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], // Kick
@@ -20,14 +20,16 @@ function App() {
   useEffect(() => {
     // Preload sounds when the app starts
     const preloadSounds = async () => {
-      await Tone.start(); // Unlock audio context after user interaction
+      // Unlock audio context after user interaction
+      await Tone.start(); 
       console.log("Tone.js context started");
     };
 
-    preloadSounds(); // Initialize the audio context when the component mounts
+    // Initialize the audio context when the component mounts
+    preloadSounds(); 
   }, []);
 
-  // Function to toggle a cell in the grid (for editing the pattern)
+  // Toggle a cell in a grid for editing the pattern
   const toggleCell = (rowIndex, colIndex) => {
     // Update the pattern by flipping the value of the clicked cell
     const updatedPattern = pattern.map((row, rIndex) =>
@@ -35,7 +37,8 @@ function App() {
         rIndex === rowIndex && cIndex === colIndex ? !cell : cell
       )
     );
-    setPattern(updatedPattern); // Set the updated pattern in state
+    // Set the updated pattern in state
+    setPattern(updatedPattern); 
   };
 
   // Function to start playback of the loop
@@ -46,27 +49,31 @@ function App() {
     // Create a sampler to load the sound files
     const sampler = new Tone.Sampler({
       urls: {
-        A1: "/sounds/tom1.wav", // Assign path for tom sound
-        C1: "/sounds/kick.wav", // Assign path for kick sound
-        D1: "/sounds/snare.wav", // Assign path for snare sound
-        E1: "/sounds/hihat.wav", // Assign path for hi-hat sound
-        C2: "/sounds/crash.wav", // Assign path for crash sound
+        A1: "/sounds/tom1.wav", // Tom
+        C1: "/sounds/kick.wav", // Kick
+        D1: "/sounds/snare.wav", // Snare
+        E1: "/sounds/hihat.wav", // Hi-hat
+        C2: "/sounds/crash.wav", // Crash
       },
-    }).toDestination(); // Route the sampler output to the default audio output
+    // Route the sampler output to the default audio output
+    }).toDestination(); 
 
     // Wait for the sampler to be fully loaded
     await sampler.loaded; // Ensure all sounds are loaded
     console.log("Sounds loaded successfully!");
 
-    // Define the loop function that will play notes based on the pattern
+    // Loop function that will play notes based on the pattern
     const loopFunction = (time) => {
       pattern.forEach((row, rowIndex) => {
-        const note = ["A1" ,"C1", "D1", "E1", "C2"][rowIndex]; // Map each row to a different note (kick, snare, hi-hat)
+        // Map each row to a different note (tom, kick, snare, hi-hat, crash)
+        const note = ["A1" ,"C1", "D1", "E1", "C2"][rowIndex]; 
         row.forEach((cell, colIndex) => {
+          // If the cell is true (active), play the note at the corresponding time
           if (cell) {
-            // If the cell is true (active), play the note at the corresponding time
-            const noteTime = time + colIndex * (Tone.Time("8n").toSeconds()); // Calculate when to play the note
-            sampler.triggerAttackRelease(note, "8n", noteTime); // Trigger the sound to play for an 8th note duration
+            // Calculate when to play the note
+            const noteTime = time + colIndex * (Tone.Time("8n").toSeconds()); 
+            sampler.triggerAttackRelease(note, "8n", noteTime); 
+            // Trigger the sound to play for an 8th note duration
             console.log(`Playing note: ${note} at time: ${noteTime}`);
           }
         });
@@ -75,38 +82,47 @@ function App() {
 
     // Create a Tone.Loop to run the loopFunction every 1 bar (1 measure)
     const newLoop = new Tone.Loop(loopFunction, "1m");
-    setLoop(newLoop); // Store the loop instance in state
+    // Store the loop instance in state
+    setLoop(newLoop); 
 
-    newLoop.start(0); // Start the loop immediately
-    Tone.Transport.start(); // Start the Tone.Transport to sync everything
-    setIsPlaying(true); // Update state to indicate playback is active
+    // Start the loop immediately
+    newLoop.start(0); 
+    // Start the Tone.Transport to sync everything
+    Tone.Transport.start(); 
+    // Update state to indicate playback is active
+    setIsPlaying(true); 
   };
 
   // Function to stop playback of the loop
   const stopPlayback = () => {
     if (loop) {
-      loop.stop(); // Stop the loop
-      loop.dispose(); // Clean up the loop instance
-      setLoop(null); // Reset the loop state
+      // Stop the loop
+      loop.stop(); 
+      // Clean up the loop instance
+      loop.dispose(); 
+      // Reset the loop state
+      setLoop(null); 
     }
-    Tone.Transport.stop(); // Stop the transport (which controls timing)
-    setIsPlaying(false); // Update state to indicate playback is stopped
+    // Stop the transport (which controls timing)
+    Tone.Transport.stop(); 
+    // Update state to indicate playback is stopped
+    setIsPlaying(false); 
   };
 
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
       <h1>Custom Drum Machine</h1>
 
-      {/* Layout for labels on the left side and grid to the right */}
+      {/* labels - left ; grid - right */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-        {/* Labels on the left */}
+        {/* Labels - left */}
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", height: "230px", marginRight: "10px" }}>
           {["Tom1", "Kick", "Snare", "Hi-hat", "Crash"].map((label, index) => (
             <div
               key={index}
               style={{
-                width: "80px", // Same width as the grid cells
-                height: "40px", // Match the height of the grid cells
+                width: "80px", 
+                height: "40px", 
                 margin: "2px",
                 textAlign: "center",
                 fontWeight: "bold",
@@ -123,17 +139,17 @@ function App() {
           ))}
         </div>
         
-        {/* Render the pattern grid */}
+        {/* Grid - right */}
         <div style={{ display: "inline-block", margin: "20px" }}>
           {pattern.map((row, rowIndex) => (
             <div key={rowIndex} style={{ display: "flex" }}>
               {row.map((cell, colIndex) => (
                 <div
                   key={colIndex}
-                  onClick={() => toggleCell(rowIndex, colIndex)} // Toggle the cell's state on click
+                  onClick={() => toggleCell(rowIndex, colIndex)} 
                   style={{
-                    width: "40px", // Same width for grid cells
-                    height: "40px", // Same height for grid cells
+                    width: "40px", 
+                    height: "40px", 
                     margin: "2px",
                     backgroundColor: cell ? "green" : "lightgray", // Highlight active cells
                     border: "1px solid black",
@@ -146,20 +162,20 @@ function App() {
         </div>
       </div>
 
-      {/* Render the play/stop button */}
+      {/* play/stop button */}
       <button
-        onClick={isPlaying ? stopPlayback : startPlayback} // Toggle playback when clicked
+        onClick={isPlaying ? stopPlayback : startPlayback} 
         style={{
           marginTop: "20px",
           padding: "10px 20px",
           cursor: "pointer",
-          backgroundColor: isPlaying ? "red" : "blue", // Change button color based on playback status
+          backgroundColor: isPlaying ? "red" : "blue", 
           color: "white",
           border: "none",
           borderRadius: "5px",
         }}
       >
-        {isPlaying ? "Stop" : "Play"} {/* Change button text based on playback status */}
+        {isPlaying ? "Stop" : "Play"} {/* button text based on playback status */}
       </button>
     </div>
   );
