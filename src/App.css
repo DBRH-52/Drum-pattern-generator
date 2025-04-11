@@ -18,6 +18,14 @@
   display: flex;
   gap: 10px;
   justify-content: center;
+  align-items: center;
+}
+
+.drum-label {
+  width: 80px;
+  text-align: right;
+  font-weight: bold;
+  color: #61dafb;
 }
 
 .drum-cell {

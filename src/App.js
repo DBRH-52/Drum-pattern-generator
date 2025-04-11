@@ -11,6 +11,8 @@ function App() {
     [false, false, false, false],
   ]);
 
+  const drumSounds = ['Kick', 'Snare', 'Hi-Hat', 'Tom', 'Crush'];
+
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -26,6 +28,7 @@ function App() {
       <div className="drum-grid">
         {pattern.map((row, rowIndex) => (
           <div key={rowIndex} className="drum-row">
+            <div className="drum-label">{drumSounds[rowIndex]}</div>
             {row.map((isActive, colIndex) => (
               <button
                 key={`${rowIndex}-${colIndex}`}
