@@ -1,0 +1,44 @@
+.App {
+  text-align: center;
+  padding: 20px;
+  background-color: #282c34;
+  min-height: 100vh;
+  color: white;
+}
+
+.drum-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+.drum-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.drum-cell {
+  width: 50px;
+  height: 50px;
+  border: 2px solid #61dafb;
+  background-color: #282c34;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.drum-cell:hover {
+  background-color: #3a3f4b;
+}
+
+.drum-cell.active {
+  background-color: #61dafb;
+}
+
+h1 {
+  color: #61dafb;
+  margin-bottom: 30px;
+}
