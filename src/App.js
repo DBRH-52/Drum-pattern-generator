@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as Tone from 'tone';
 import './App.css';
 
@@ -11,29 +11,112 @@ function App() {
     [false, false, false, false],
   ]);
 
-  const drumSounds = ['Kick', 'Snare', 'Hi-Hat', 'Tom', 'Crush'];
-
+  const drumSounds = ['Kick', 'Snare', 'Hi-Hat', 'Crash', 'Tom'];
+  
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const sequencerRef = useRef(null);
+  const samplerRef = useRef(null);
+  
+  // initialize the sampler
+  useEffect(() => {
+    samplerRef.current = new Tone.Sampler({
+      urls: {
+        C2: "kick.wav",
+        D2: "snare.wav",
+        E2: "hihat.wav",
+        F2: "crash.wav",
+        G2: "tom1.wav",
+      },
+      onload: () => {
+        console.log("Sampler loaded!");
+      },
+      baseUrl: "/sounds/"
+    }).toDestination();
+    
+    return () => {
+      if (sequencerRef.current) {
+        sequencerRef.current.dispose();
+      }
+      if (samplerRef.current) {
+        samplerRef.current.dispose();
+      }
+    };
+  }, []);
 
-  const toggleGridCell = (row, col) => {
+  const toggleStep = (row, col) => {
     const newPattern = [...pattern];
     newPattern[row][col] = !newPattern[row][col];
     setPattern(newPattern);
   };
 
+  const playSequence = async () => {
+    // request audio context to start
+    await Tone.start();
+    
+    if (!isPlaying) {
+      setIsPlaying(true);
+      
+      // set the tempo
+      Tone.Transport.bpm.value = 120;
+      
+      // create a sequence
+      sequencerRef.current = new Tone.Sequence(
+        (time, step) => {
+          // update the current step
+          setCurrentStep(step);
+          
+          // play the active sounds for this step
+          pattern.forEach((row, rowIndex) => {
+            if (row[step]) {
+              // map row index to corresponding note
+              const notes = ['C2', 'D2', 'E2', 'F2', 'G2'];
+              samplerRef.current.triggerAttackRelease(notes[rowIndex], '8n', time);
+            }
+          });
+        },
+        [0, 1, 2, 3],
+        '8n'
+      );
+      
+      // start the sequence
+      sequencerRef.current.start(0);
+      Tone.Transport.start();
+    } else {
+      stopSequence();
+    }
+  };
+
+  const stopSequence = () => {
+    if (sequencerRef.current) {
+      sequencerRef.current.stop();
+      Tone.Transport.stop();
+      setIsPlaying(false);
+      setCurrentStep(0);
+    }
+  };
+
   return (
     <div className="App">
       <h1>Drum Pattern Generator</h1>
+      
+      <div className="controls">
+        <button className="play-button" onClick={playSequence}>
+          {isPlaying ? 'Stop' : 'Play'}
+        </button>
+      </div>
+      
       <div className="drum-grid">
+        
+        {/* pattern grid */}
         {pattern.map((row, rowIndex) => (
           <div key={rowIndex} className="drum-row">
             <div className="drum-label">{drumSounds[rowIndex]}</div>
             {row.map((isActive, colIndex) => (
               <button
                 key={`${rowIndex}-${colIndex}`}
-                className={`drum-cell ${isActive ? 'active' : ''}`}
-                onClick={() => toggleGridCell(rowIndex, colIndex)}
+                className={`drum-cell ${isActive ? 'active' : ''} ${currentStep === colIndex && isPlaying ? 'current' : ''}`}
+                onClick={() => toggleStep(rowIndex, colIndex)}
               />
             ))}
           </div>
