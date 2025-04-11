@@ -26,6 +26,16 @@ function App() {
     <div className="App">
       <h1>Drum Pattern Generator</h1>
       <div className="drum-grid">
+        {/* beat umbers */}
+        <div className="beat-numbers">
+          <div className="drum-label"></div>
+          {[1, 2, 3, 4].map((beat, index) => (
+            <div key={index} className="beat-number">
+              {beat}
+            </div>
+          ))}
+        </div>
+        
         {pattern.map((row, rowIndex) => (
           <div key={rowIndex} className="drum-row">
             <div className="drum-label">{drumSounds[rowIndex]}</div>
@@ -38,6 +48,12 @@ function App() {
             ))}
           </div>
         ))}
+      </div>
+      
+      <div className="controls">
+        <button className="play-button">
+          Play
+        </button>
       </div>
     </div>
   );
