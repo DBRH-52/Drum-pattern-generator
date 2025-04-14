@@ -3,13 +3,26 @@ import * as Tone from 'tone';
 import './App.css';
 
 function App() {
-  const [pattern, setPattern] = useState([
-    [false, false, false, false],
-    [false, false, false, false],
-    [false, false, false, false],
-    [false, false, false, false],
-    [false, false, false, false],
-  ]);
+  const timeSignatures = [
+    { id: '4/4', beats: 4, name: '4/4' },
+    { id: '3/4', beats: 3, name: '3/4' },
+    { id: '2/4', beats: 2, name: '2/4' },
+    { id: '5/4', beats: 5, name: '5/4' },
+    { id: '6/8', beats: 6, name: '6/8' },
+    { id: '7/8', beats: 7, name: '7/8' },
+    { id: '9/8', beats: 9, name: '9/8' },
+    { id: '12/8', beats: 12, name: '12/8' },
+  ];
+
+  const [currentTimeSignature, setCurrentTimeSignature] = useState(timeSignatures[0]);
+  const [measureCount, setMeasureCount] = useState(1);
+
+  // dynamic pattern based on time signature and measure count
+  const createEmptyPattern = (beats, measures) => {
+    return Array(5).fill().map(() => Array(beats * measures).fill(false));
+  };
+
+  const [pattern, setPattern] = useState(createEmptyPattern(currentTimeSignature.beats, measureCount));
 
   const drumSounds = ['Kick', 'Snare', 'Hi-Hat', 'Crash', 'Tom'];
   
@@ -50,6 +63,20 @@ function App() {
     Tone.Transport.bpm.value = tempo;
   }, [tempo]);
 
+  // handle time signature or measure count changes
+  useEffect(() => {
+    // stop any playing sequence
+    if (isPlaying) {
+      stopSequence();
+    }
+    
+    // create a new pattern with the correct number of beats and measures
+    setPattern(createEmptyPattern(currentTimeSignature.beats, measureCount));
+    
+    // reset current step
+    setCurrentStep(0);
+  }, [currentTimeSignature, measureCount]);
+
   const toggleStep = (row, col) => {
     const newPattern = [...pattern];
     newPattern[row][col] = !newPattern[row][col];
@@ -58,6 +85,21 @@ function App() {
 
   const handleTempoChange = (e) => {
     setTempo(Number(e.target.value));
+  };
+
+  const handleTimeSignatureChange = (e) => {
+    const selectedSignature = timeSignatures.find(ts => ts.id === e.target.value);
+    setCurrentTimeSignature(selectedSignature);
+  };
+
+  const handleAddMeasure = () => {
+    setMeasureCount(prevCount => prevCount + 1);
+  };
+
+  const handleRemoveMeasure = () => {
+    if (measureCount > 1) {
+      setMeasureCount(prevCount => prevCount - 1);
+    }
   };
 
   const playSequence = async () => {
@@ -70,7 +112,10 @@ function App() {
       // set the tempo
       Tone.Transport.bpm.value = tempo;
       
-      // create a sequence
+      // create a sequence with the correct number of steps across all measures
+      const totalSteps = currentTimeSignature.beats * measureCount;
+      const steps = Array.from({ length: totalSteps }, (_, i) => i);
+      
       sequencerRef.current = new Tone.Sequence(
         (time, step) => {
           // update the current step
@@ -85,7 +130,7 @@ function App() {
             }
           });
         },
-        [0, 1, 2, 3],
+        steps,
         '8n'
       );
       
@@ -104,6 +149,20 @@ function App() {
       setIsPlaying(false);
       setCurrentStep(0);
     }
+  };
+
+  // generate beat numbers for multiple measures
+  const generateBeatNumbers = () => {
+    const numbers = [];
+    for (let measure = 0; measure < measureCount; measure++) {
+      for (let beat = 0; beat < currentTimeSignature.beats; beat++) {
+        numbers.push({
+          value: beat + 1,
+          measure: measure + 1
+        });
+      }
+    }
+    return numbers;
   };
 
   return (
@@ -128,15 +187,54 @@ function App() {
             className="tempo-slider"
           />
         </div>
+        
+        <div className="time-signature-control">
+          <label htmlFor="time-signature-select">Time Signature</label>
+          <select 
+            id="time-signature-select"
+            value={currentTimeSignature.id}
+            onChange={handleTimeSignatureChange}
+            className="time-signature-select"
+            disabled={isPlaying}
+          >
+            {timeSignatures.map(ts => (
+              <option key={ts.id} value={ts.id}>
+                {ts.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        
+        <div className="measure-control">
+          <label>Measures</label>
+          <div className="measure-buttons">
+            <button 
+              onClick={handleRemoveMeasure} 
+              disabled={measureCount <= 1 || isPlaying}
+              className="measure-button"
+            >
+              -
+            </button>
+            <span className="measure-count">{measureCount}</span>
+            <button 
+              onClick={handleAddMeasure} 
+              disabled={isPlaying || measureCount >= 4}
+              className="measure-button"
+            >
+              +
+            </button>
+          </div>
+        </div>
       </div>
       
       <div className="drum-grid">
         {/* beat numbers */}
         <div className="beat-numbers">
           <div className="drum-label"></div>
-          {[1, 2, 3, 4].map((beat, index) => (
-            <div key={index} className="beat-number">
-              {beat}
+          {generateBeatNumbers().map((beat, index) => (
+            <div key={index} className={`beat-number ${index % currentTimeSignature.beats === 0 ? 'measure-start' : ''}`}>
+              {beat.value}
+              {beat.value === 1 && <span className="measure-indicator">{beat.measure}</span>}
             </div>
           ))}
         </div>
@@ -147,7 +245,9 @@ function App() {
             {row.map((isActive, colIndex) => (
               <button
                 key={`${rowIndex}-${colIndex}`}
-                className={`drum-cell ${isActive ? 'active' : ''} ${currentStep === colIndex && isPlaying ? 'current' : ''}`}
+                className={`drum-cell ${isActive ? 'active' : ''} 
+                  ${currentStep === colIndex && isPlaying ? 'current' : ''} 
+                  ${colIndex % currentTimeSignature.beats === 0 ? 'measure-start' : ''}`}
                 onClick={() => toggleStep(rowIndex, colIndex)}
               />
             ))}
