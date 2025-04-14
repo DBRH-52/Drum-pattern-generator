@@ -158,7 +158,8 @@ function App() {
       for (let beat = 0; beat < currentTimeSignature.beats; beat++) {
         numbers.push({
           value: beat + 1,
-          measure: measure + 1
+          measure: measure + 1,
+          isFirstBeat: beat === 0
         });
       }
     }
@@ -228,13 +229,31 @@ function App() {
       </div>
       
       <div className="drum-grid">
+        {/* measure indicators */}
+        <div className="measure-indicators">
+          <div className="drum-label"></div>
+          {Array.from({ length: measureCount }).map((_, index) => (
+            <div 
+              key={index} 
+              className="measure-label"
+              style={{ 
+                width: `${currentTimeSignature.beats * 50 + (currentTimeSignature.beats - 1) * 10}px`
+              }}
+            >
+              Measure {index + 1}
+            </div>
+          ))}
+        </div>
+        
         {/* beat numbers */}
         <div className="beat-numbers">
           <div className="drum-label"></div>
           {generateBeatNumbers().map((beat, index) => (
-            <div key={index} className={`beat-number ${index % currentTimeSignature.beats === 0 ? 'measure-start' : ''}`}>
+            <div 
+              key={index} 
+              className={`beat-number ${beat.isFirstBeat ? 'measure-start' : ''}`}
+            >
               {beat.value}
-              {beat.value === 1 && <span className="measure-indicator">{beat.measure}</span>}
             </div>
           ))}
         </div>
