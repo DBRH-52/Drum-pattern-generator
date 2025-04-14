@@ -15,6 +15,7 @@ function App() {
   
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [tempo, setTempo] = useState(120);
   const sequencerRef = useRef(null);
   const samplerRef = useRef(null);
   
@@ -44,10 +45,19 @@ function App() {
     };
   }, []);
 
+  // update tempo whenever it changes
+  useEffect(() => {
+    Tone.Transport.bpm.value = tempo;
+  }, [tempo]);
+
   const toggleStep = (row, col) => {
     const newPattern = [...pattern];
     newPattern[row][col] = !newPattern[row][col];
     setPattern(newPattern);
+  };
+
+  const handleTempoChange = (e) => {
+    setTempo(Number(e.target.value));
   };
 
   const playSequence = async () => {
@@ -58,7 +68,7 @@ function App() {
       setIsPlaying(true);
       
       // set the tempo
-      Tone.Transport.bpm.value = 120;
+      Tone.Transport.bpm.value = tempo;
       
       // create a sequence
       sequencerRef.current = new Tone.Sequence(
@@ -104,9 +114,32 @@ function App() {
         <button className="play-button" onClick={playSequence}>
           {isPlaying ? 'Stop' : 'Play'}
         </button>
+        
+        <div className="tempo-control">
+          <label htmlFor="tempo-slider">Tempo: {tempo} BPM</label>
+          <input 
+            id="tempo-slider"
+            type="range"
+            min="60"
+            max="200"
+            step="1"
+            value={tempo}
+            onChange={handleTempoChange}
+            className="tempo-slider"
+          />
+        </div>
       </div>
       
       <div className="drum-grid">
+        {/* beat numbers */}
+        <div className="beat-numbers">
+          <div className="drum-label"></div>
+          {[1, 2, 3, 4].map((beat, index) => (
+            <div key={index} className="beat-number">
+              {beat}
+            </div>
+          ))}
+        </div>
         
         {/* pattern grid */}
         {pattern.map((row, rowIndex) => (
