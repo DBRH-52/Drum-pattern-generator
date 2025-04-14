@@ -101,6 +101,11 @@ function App() {
       setMeasureCount(prevCount => prevCount - 1);
     }
   };
+  
+  const handleResetPattern = () => {
+    // reset the pattern to empty
+    setPattern(createEmptyPattern(currentTimeSignature.beats, measureCount));
+  };
 
   const playSequence = async () => {
     // request audio context to start
@@ -173,6 +178,14 @@ function App() {
       <div className="controls">
         <button className="play-button" onClick={playSequence}>
           {isPlaying ? 'Stop' : 'Play'}
+        </button>
+        
+        <button 
+          className="reset-button" 
+          onClick={handleResetPattern} 
+          disabled={isPlaying}
+        >
+          Reset
         </button>
         
         <div className="tempo-control">
