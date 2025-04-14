@@ -131,7 +131,7 @@ function App() {
       </div>
       
       <div className="drum-grid">
-        {/* beat numbers */}
+        {/* beat umbers */}
         <div className="beat-numbers">
           <div className="drum-label"></div>
           {[1, 2, 3, 4].map((beat, index) => (
@@ -141,7 +141,6 @@ function App() {
           ))}
         </div>
         
-        {/* pattern grid */}
         {pattern.map((row, rowIndex) => (
           <div key={rowIndex} className="drum-row">
             <div className="drum-label">{drumSounds[rowIndex]}</div>
@@ -154,6 +153,12 @@ function App() {
             ))}
           </div>
         ))}
+      </div>
+      
+      <div className="controls">
+        <button className="play-button">
+          Play
+        </button>
       </div>
     </div>
   );
