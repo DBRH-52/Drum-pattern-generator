@@ -107,9 +107,28 @@ function App() {
     setPattern(createEmptyPattern(currentTimeSignature.beats, measureCount));
   };
 
-  const playSequence = async () => {
-    // request audio context to start
+  // initialize Tone.js audio context when needed
+  const initializeAudio = async () => {
     await Tone.start();
+    return true;
+  };
+  
+  // play a single note sound when clicking on its label
+  const playDrumSound = async (soundIndex) => {
+    if (!samplerRef.current) return;
+    
+    await initializeAudio();
+    
+    // map sound index to corresponding note
+    const notes = ['C2', 'D2', 'E2', 'F2', 'G2'];
+    const note = notes[soundIndex];
+    
+    // play the sound
+    samplerRef.current.triggerAttackRelease(note, '8n');
+  };
+
+  const playSequence = async () => {
+    await initializeAudio();
     
     if (!isPlaying) {
       setIsPlaying(true);
@@ -283,7 +302,13 @@ function App() {
         
         {pattern.map((row, rowIndex) => (
           <div key={rowIndex} className="drum-row">
-            <div className="drum-label">{drumSounds[rowIndex]}</div>
+            <div 
+              className="drum-label clickable" 
+              onClick={() => playDrumSound(rowIndex)}
+              title={`Click to hear ${drumSounds[rowIndex]} sound`}
+            >
+              {drumSounds[rowIndex]}
+            </div>
             {row.map((isActive, colIndex) => (
               <button
                 key={`${rowIndex}-${colIndex}`}
