@@ -176,67 +176,77 @@ function App() {
       <h1>Drum Pattern Generator</h1>
       
       <div className="controls">
-        <button className="play-button" onClick={playSequence}>
-          {isPlaying ? 'Stop' : 'Play'}
-        </button>
-        
-        <button 
-          className="reset-button" 
-          onClick={handleResetPattern} 
-          disabled={isPlaying}
-        >
-          Reset
-        </button>
-        
-        <div className="tempo-control">
-          <label htmlFor="tempo-slider">Tempo: {tempo} BPM</label>
-          <input 
-            id="tempo-slider"
-            type="range"
-            min="60"
-            max="200"
-            step="1"
-            value={tempo}
-            onChange={handleTempoChange}
-            className="tempo-slider"
-          />
-        </div>
-        
-        <div className="time-signature-control">
-          <label htmlFor="time-signature-select">Time Signature</label>
-          <select 
-            id="time-signature-select"
-            value={currentTimeSignature.id}
-            onChange={handleTimeSignatureChange}
-            className="time-signature-select"
+        <div className="controls-group">
+          <button className="play-button" onClick={playSequence}>
+            {isPlaying ? 'Stop' : 'Play'}
+          </button>
+          
+          <button 
+            className="reset-button" 
+            onClick={handleResetPattern} 
             disabled={isPlaying}
           >
-            {timeSignatures.map(ts => (
-              <option key={ts.id} value={ts.id}>
-                {ts.name}
-              </option>
-            ))}
-          </select>
+            Reset
+          </button>
         </div>
         
-        <div className="measure-control">
-          <label>Measures</label>
-          <div className="measure-buttons">
-            <button 
-              onClick={handleRemoveMeasure} 
-              disabled={measureCount <= 1 || isPlaying}
-              className="measure-button"
+        <div className="divider"></div>
+        
+        <div className="controls-group">
+          <div className="time-signature-control">
+            <label htmlFor="time-signature-select">Time Signature</label>
+            <select 
+              id="time-signature-select"
+              value={currentTimeSignature.id}
+              onChange={handleTimeSignatureChange}
+              className="time-signature-select"
+              disabled={isPlaying}
             >
-              -
-            </button>
-            <span className="measure-count">{measureCount}</span>
-            <button 
-              onClick={handleAddMeasure} 
-              disabled={isPlaying || measureCount >= 4}
-              className="measure-button"
-            >
-              +
-            </button>
+              {timeSignatures.map(ts => (
+                <option key={ts.id} value={ts.id}>
+                  {ts.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="measure-control">
+            <label>Measures</label>
+            <div className="measure-buttons">
+              <button 
+                onClick={handleRemoveMeasure} 
+                disabled={measureCount <= 1 || isPlaying}
+                className="measure-button"
+              >
+                -
+              </button>
+              <span className="measure-count">{measureCount}</span>
+              <button 
+                onClick={handleAddMeasure} 
+                disabled={isPlaying || measureCount >= 4}
+                className="measure-button"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div className="divider"></div>
+        
+        <div className="controls-group">
+          <div className="tempo-control">
+            <label htmlFor="tempo-slider">Tempo: {tempo} BPM</label>
+            <input 
+              id="tempo-slider"
+              type="range"
+              min="60"
+              max="200"
+              step="1"
+              value={tempo}
+              onChange={handleTempoChange}
+              className="tempo-slider"
+            />
           </div>
         </div>
       </div>
