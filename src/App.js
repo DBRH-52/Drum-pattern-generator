@@ -190,6 +190,75 @@ function App() {
     return numbers;
   };
 
+  const generateLinearPattern = () => {
+    const newPattern = createEmptyPattern(currentTimeSignature.beats, measureCount);
+    const totalSteps = currentTimeSignature.beats * measureCount;
+    
+    // linear pattern densities (one hit per subdivision)
+    const densities = [
+      [1, 0, 0, 0],  // 1 hit on the first subdivision
+      [0, 1, 0, 0],  // 1 hit on the second subdivision
+      [0, 0, 1, 0],  // 1 hit on the third subdivision
+      [0, 0, 0, 1]   // 1 hit on the fourth subdivision
+    ];
+    
+    // for each beat in the pattern
+    for (let beat = 0; beat < totalSteps; beat++) {
+      // randomly decide if this beat should have a hit
+      if (Math.random() < 0.7) { // 70% chance of a hit per beat
+        // randomly select which subdivision to place the hit
+        const density = densities[Math.floor(Math.random() * densities.length)];
+        
+        // for each subdivision in the beat
+        density.forEach((shouldHit, subdivision) => {
+          if (shouldHit) {
+            // calculate the actual step in the pattern
+            const step = beat * 4 + subdivision;
+            if (step < totalSteps * 4) {
+              // randomly select which drum to hit
+              // weights for different drums (kick, snare, hi-hat, crash, tom)
+              const drumWeights = [0.3, 0.3, 0.25, 0.05, 0.1];
+              let random = Math.random();
+              let selectedDrum = 0;
+              
+              // select drum based on weights
+              for (let i = 0; i < drumWeights.length; i++) {
+                if (random < drumWeights[i]) {
+                  selectedDrum = i;
+                  break;
+                }
+                random -= drumWeights[i];
+              }
+              
+              // ensure no other drum is playing at this step
+              for (let row = 0; row < newPattern.length; row++) {
+                newPattern[row][Math.floor(step/4)] = (row === selectedDrum);
+              }
+            }
+          }
+        });
+      }
+    }
+    // ensure the pattern starts with either kick or snare
+    let firstHitPlaced = false;
+    for (let step = 0; step < 4 && !firstHitPlaced; step++) {
+      if (Math.random() < 0.7) { // 70% chance for kick, 30% for snare
+        newPattern[0][0] = true; // kick
+        firstHitPlaced = true;
+      } else {
+        newPattern[1][0] = true; // snare
+        firstHitPlaced = true;
+      }
+    }
+    
+    return newPattern;
+  };
+  const handleLinearPattern = () => {
+    if (!isPlaying) {
+      setPattern(generateLinearPattern());
+    }
+  };
+
   return (
     <div className="App">
       <h1>Drum Pattern Generator</h1>
@@ -206,6 +275,14 @@ function App() {
             disabled={isPlaying}
           >
             Reset
+          </button>
+
+          <button 
+            className="linear-button" 
+            onClick={handleLinearPattern}
+            disabled={isPlaying}
+          >
+            Linear
           </button>
         </div>
         
