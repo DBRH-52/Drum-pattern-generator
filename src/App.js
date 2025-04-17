@@ -190,6 +190,48 @@ function App() {
     return numbers;
   };
 
+  const generateRandomPattern = () => {
+    const newPattern = createEmptyPattern(currentTimeSignature.beats, measureCount);
+    // probability settings for each drum
+    const probabilities = {
+      0: 0.3,  // Kick (moderate probability)
+      1: 0.2,  // Snare (lower probability)
+      2: 0.4,  // Hi-Hat (higher probability)
+      3: 0.05, // Crash (very low probability)
+      4: 0.1   // Tom (low probability)
+    };
+    // common positions for kick and snare in 4/4
+    const isCommonPosition = (step, row) => {
+      const beatPosition = step % currentTimeSignature.beats;
+      if (row === 0) { // kick
+        return beatPosition === 0 || beatPosition === 2; // 1st and 3rd beat
+      }
+      if (row === 1) { // snare
+        return beatPosition === 1 || beatPosition === 3; // 2nd and 4th beat
+      }
+      return true;
+    };
+    // fill the pattern
+    for (let row = 0; row < newPattern.length; row++) {
+      for (let step = 0; step < newPattern[row].length; step++) {
+        const baseProb = probabilities[row];
+        // increasing probability for common positions
+        const adjustedProb = isCommonPosition(step, row) ? 
+          baseProb * 1.5 : baseProb * 0.5;
+        
+        newPattern[row][step] = Math.random() < adjustedProb;
+      }
+    }
+    return newPattern;
+  };
+  const handleRandomPattern = () => {
+    if (!isPlaying) {
+      setPattern(generateRandomPattern());
+    }
+  };
+
+
+  
   return (
     <div className="App">
       <h1>Drum Pattern Generator</h1>
@@ -206,6 +248,14 @@ function App() {
             disabled={isPlaying}
           >
             Reset
+          </button>
+
+          <button 
+            className="random-button" 
+            onClick={handleRandomPattern}
+            disabled={isPlaying}
+          >
+            Random
           </button>
         </div>
         
