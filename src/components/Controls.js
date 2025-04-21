@@ -1,6 +1,5 @@
 import React from 'react';
 import { timeSignatures } from '../patterns/timeSignatures';
-import { patternPresets } from '../patterns/patternPresets';
 import { MIN_TEMPO, MAX_TEMPO, MIN_MEASURES, MAX_MEASURES } from '../utils/constants';
 
 const Controls = ({
@@ -12,8 +11,7 @@ const Controls = ({
   onTimeSignatureChange,
   onMeasureChange,
   onPlayStop,
-  onReset,
-  onPresetSelect
+  onReset
 }) => {
   return (
     <div className="controls">
@@ -88,27 +86,6 @@ const Controls = ({
             onChange={onTempoChange}
             className="tempo-slider"
           />
-        </div>
-      </div>
-
-      <div className="divider"></div>
-
-      <div className="controls-group">
-        <div className="preset-control">
-          <label htmlFor="preset-select">Pattern Presets</label>
-          <select 
-            id="preset-select"
-            onChange={(e) => onPresetSelect(e.target.value)}
-            className="preset-select"
-            disabled={isPlaying}
-          >
-            <option value="">Select a preset...</option>
-            {Object.entries(patternPresets).map(([key, preset]) => (
-              <option key={key} value={key}>
-                {preset.name}
-              </option>
-            ))}
-          </select>
         </div>
       </div>
     </div>
