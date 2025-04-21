@@ -24,6 +24,49 @@ function App() {
 
   const [pattern, setPattern] = useState(createEmptyPattern(currentTimeSignature.beats, measureCount));
 
+  const patternPresets = {
+    'basicRock': {
+      name: 'Basic Rock Beat',
+      timeSignature: '4/4',
+      pattern: [
+        [true, false, false, false, true, false, false, false], // Kick
+        [false, false, true, false, false, false, true, false], // Snare
+        [true, true, true, true, true, true, true, true],      // Hi-Hat
+        [false, false, false, false, false, false, false, false], // Crash
+        [false, false, false, false, false, false, false, false]  // Tom
+      ]
+    },
+    'disco': {
+      name: 'Disco Beat',
+      timeSignature: '4/4',
+      pattern: [
+        [true, false, false, false, true, false, false, false], // Kick
+        [false, false, true, false, false, false, true, false], // Snare
+        [true, false, true, false, true, false, true, false],   // Hi-Hat
+        [false, false, false, false, false, false, false, false], // Crash
+        [false, false, false, false, false, false, false, false]  // Tom
+      ]
+    },
+    'shuffle': {
+      name: 'Shuffle Beat',
+      timeSignature: '4/4',
+      pattern: [
+        [true, false, false, false, true, false, false, false], // Kick
+        [false, false, true, false, false, false, true, false], // Snare
+        [true, false, false, true, false, false, true, false],  // Hi-Hat
+        [false, false, false, false, false, false, false, false], // Crash
+        [false, false, false, false, false, false, false, false]  // Tom
+      ]
+    }
+  };
+
+  const loadPreset = (presetName) => {
+    const preset = patternPresets[presetName];
+    if (preset && preset.timeSignature === currentTimeSignature.id) {
+      setPattern(preset.pattern);
+    }
+  };
+
   const drumSounds = ['Kick', 'Snare', 'Hi-Hat', 'Crash', 'Tom'];
   
   const [currentStep, setCurrentStep] = useState(0);
@@ -266,6 +309,27 @@ function App() {
               onChange={handleTempoChange}
               className="tempo-slider"
             />
+          </div>
+        </div>
+
+        <div className="divider"></div>
+
+        <div className="controls-group">
+          <div className="preset-control">
+            <label htmlFor="preset-select">Pattern Presets</label>
+            <select 
+              id="preset-select"
+              onChange={(e) => loadPreset(e.target.value)}
+              className="preset-select"
+              disabled={isPlaying}
+            >
+              <option value="">Select a preset...</option>
+              {Object.entries(patternPresets).map(([key, preset]) => (
+                <option key={key} value={key}>
+                  {preset.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
