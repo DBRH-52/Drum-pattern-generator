@@ -10,6 +10,9 @@ import { useAudio } from './hooks/useAudio';
 import { useDrumPattern } from './hooks/useDrumPattern';
 import { useSequencer } from './hooks/useSequencer';
 
+// patterns
+import { patternPresets } from './patterns/patternPresets';
+
 function App() {
   const {
     pattern,
@@ -20,7 +23,8 @@ function App() {
     handleMeasureChange,
     handleToggleStep,
     handleTempoChange,
-    handleReset
+    handleReset,
+    setPattern
   } = useDrumPattern();
 
   const {
@@ -36,6 +40,15 @@ function App() {
     stop
   } = useSequencer(pattern, samplerRef, tempo);
 
+  const handlePresetSelect = (presetName) => {
+    if (!presetName) return;
+    
+    const preset = patternPresets[presetName];
+    if (preset && preset.timeSignature === currentTimeSignature.id) {
+      setPattern(preset.pattern);
+    }
+  };
+
   return (
     <div className="App">
       <h1>Drum Pattern Generator</h1>
@@ -50,6 +63,7 @@ function App() {
         onMeasureChange={handleMeasureChange}
         onPlayStop={() => handlePlayStop(initializeAudio)}
         onReset={handleReset}
+        onPresetSelect={handlePresetSelect}
       />
       
       <DrumGrid
