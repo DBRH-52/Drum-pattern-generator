@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { timeSignatures } from '../patterns/timeSignatures';
-import { createEmptyPattern, toggleStep, resetPattern } from '../patterns/patternGenerator';
+import { createEmptyPattern, toggleStep, resetPattern, generateRandomPattern } from '../patterns/patternGenerator';
 import { DEFAULT_TEMPO, DEFAULT_MEASURE_COUNT } from '../utils/constants';
 
 export const useDrumPattern = () => {
@@ -40,6 +40,11 @@ export const useDrumPattern = () => {
     setPattern(resetPattern(currentTimeSignature.beats, measureCount));
   };
 
+  // handle random pattern generation
+  const handleRandomPattern = () => {
+    setPattern(generateRandomPattern(currentTimeSignature.beats, measureCount));
+  };
+
   return {
     pattern,
     currentTimeSignature,
@@ -50,6 +55,7 @@ export const useDrumPattern = () => {
     handleMeasureChange,
     handleToggleStep,
     handleTempoChange,
-    handleReset
+    handleReset,
+    handleRandomPattern
   };
 };

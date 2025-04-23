@@ -24,6 +24,7 @@ function App() {
     handleToggleStep,
     handleTempoChange,
     handleReset,
+    handleRandomPattern,
     setPattern
   } = useDrumPattern();
 
@@ -63,6 +64,7 @@ function App() {
         onMeasureChange={handleMeasureChange}
         onPlayStop={() => handlePlayStop(initializeAudio)}
         onReset={handleReset}
+        onRandomPattern={handleRandomPattern}
         onPresetSelect={handlePresetSelect}
       />
       
