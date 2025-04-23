@@ -15,16 +15,24 @@ export const resetPattern = (beats, measures) => {
   return createEmptyPattern(beats, measures);
 };
 
-// generate a linear pattern with random hits - strictly one note at a time
+// generate a linear pattern with random hits
 export const generateLinearPattern = (beats, measures) => {
   const newPattern = createEmptyPattern(beats, measures);
   const totalSteps = beats * measures;
   
-  // For each beat
+  // linear pattern densities (one hit per subdivision)
+  const densities = [
+    [1, 0, 0, 0],  // 1 hit on the first subdivision
+    [0, 1, 0, 0],  // 1 hit on the second subdivision
+    [0, 0, 1, 0],  // 1 hit on the third subdivision
+    [0, 0, 0, 1]   // 1 hit on the fourth subdivision
+  ];
+  
+  // for each beat in the pattern
   for (let beat = 0; beat < totalSteps; beat++) {
     // 70% chance of having a hit in this beat
     if (Math.random() < 0.7) {
-      // Randomly select which subdivision to place the hit (0-3)
+      // randomly select which subdivision to place the hit (0-3)
       const subdivision = Math.floor(Math.random() * 4);
       
       // weights for different drums (kick, snare, hi-hat, crash, tom)
@@ -40,8 +48,7 @@ export const generateLinearPattern = (beats, measures) => {
         }
         random -= drumWeights[i];
       }
-      
-      // Place the hit - only one drum at this exact step
+      // place the hit - only one drum at this exact step
       newPattern[selectedDrum][beat] = true;
     }
   }
