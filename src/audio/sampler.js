@@ -1,25 +1,33 @@
 import * as Tone from 'tone';
 import { DRUM_NOTES } from '../utils/constants';
+import { DRUM_KITS } from './drumKits';
 
 // create and configure the sampler
-export const createSampler = () => {
-  return new Tone.Sampler({
-    urls: {
-      C2: "kick.wav",
-      D2: "snare.wav",
-      E2: "hihat.wav",
-      F2: "crash.wav",
-      G2: "tom1.wav",
-    },
+export const createSampler = (kitName = 'default') => {
+  const kit = DRUM_KITS[kitName];
+  
+  // create the sampler with the selected kit
+  const sampler = new Tone.Sampler({
+    urls: Object.entries(kit.sounds).reduce((acc, [key, { note, file }]) => {
+      acc[note] = file;
+      return acc;
+    }, {}),
     onload: () => {
       console.log("Sampler loaded!");
     },
     baseUrl: "/sounds/"
   }).toDestination();
+
+  return {
+    sampler,
+    kit
+  };
 };
 
 // play a single drum sound
-export const playDrumSound = (sampler, soundIndex) => {
-  if (!sampler) return;
-  sampler.triggerAttackRelease(DRUM_NOTES[soundIndex], '8n');
+export const playDrumSound = (samplerState, soundIndex) => {
+  if (!samplerState?.sampler) return;
+  
+  const note = DRUM_NOTES[soundIndex];
+  samplerState.sampler.triggerAttackRelease(note, '8n');
 };
