@@ -4,6 +4,7 @@ import './App.css';
 // components
 import DrumGrid from './components/DrumGrid';
 import Controls from './components/Controls';
+import SoundControls from './components/SoundControls';
 
 // hooks
 import { useAudio } from './hooks/useAudio';
@@ -31,7 +32,11 @@ function App() {
   const {
     samplerRef,
     initializeAudio,
-    playSound
+    playSound,
+    currentKit,
+    changeKit,
+    setVolume,
+    setEffect
   } = useAudio();
 
   const {
@@ -66,6 +71,11 @@ function App() {
         onReset={handleReset}
         onRandomPattern={handleRandomPattern}
         onPresetSelect={handlePresetSelect}
+      />
+
+      <SoundControls
+        currentKit={currentKit}
+        onKitChange={changeKit}
       />
       
       <DrumGrid
