@@ -16,38 +16,37 @@ export const resetPattern = (beats, measures) => {
 };
 
 // generate a linear pattern with random hits
-export const generateLinearPattern = (beats, measures) => {
-  const newPattern = createEmptyPattern(beats, measures);
-  const totalSteps = beats * measures;
-  
-  // linear pattern densities (one hit per subdivision)
-  const densities = [
-    [1, 0, 0, 0],  // 1 hit on the first subdivision
-    [0, 1, 0, 0],  // 1 hit on the second subdivision
-    [0, 0, 1, 0],  // 1 hit on the third subdivision
-    [0, 0, 0, 1]   // 1 hit on the fourth subdivision
-  ];
-  
-  for (let measure = 0; measure < measures; measure++) {
-    for (let beat = 0; beat < beats; beat++) {
-      const step = measure * beats + beat;
-      // randomly select a drum for this step
-      const selectedDrum = Math.floor(Math.random() * newPattern.length);
-      // set only one drum per step
-      newPattern.forEach((row, drumIdx) => {
-        row[step] = drumIdx === selectedDrum;
-      });
+export const generateLinearPattern = (beats = 4, measures = 1) => {
+  const totalSteps = beats * measures; // one step per beat
+  const drumWeights = [0.35, 0.35, 0.25, 0.03, 0.02]; // kick, snare, hihat, crash, tom
+
+  // create empty pattern: each drum has an array of steps initialized to false
+  const newPattern = Array.from({ length: drumWeights.length }, () => Array(totalSteps).fill(false));
+
+  for (let step = 0; step < totalSteps; step++) {
+    // for each beat (step), place exactly one hit
+    let r = Math.random();
+    let selectedDrum = 0;
+    for (let i = 0; i < drumWeights.length; i++) {
+      if (r < drumWeights[i]) {
+        selectedDrum = i;
+        break;
+      }
+      r -= drumWeights[i];
     }
+
+    // set only the selected drum to true at this step
+    newPattern.forEach((row, idx) => {
+      row[step] = idx === selectedDrum;
+    });
   }
-  
-  // ensure the pattern starts with either kick or snare
+
+  // ensure the first beat starts with kick or snare
   if (!newPattern[0][0] && !newPattern[1][0]) {
-    if (Math.random() < 0.7) {
-      newPattern[0][0] = true; // kick
-    } else {
-      newPattern[1][0] = true; // snare
-    }
+    newPattern[Math.random() < 0.7 ? 0 : 1][0] = true;
   }
-  
+
   return newPattern;
 };
+
+
