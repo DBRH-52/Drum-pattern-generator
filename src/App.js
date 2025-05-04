@@ -13,6 +13,7 @@ import { useSequencer } from './hooks/useSequencer';
 
 // patterns
 import { patternPresets } from './patterns/patternPresets';
+import { generateLinearPattern } from './patterns/patternGenerator';
 
 function App() {
   const {
@@ -55,6 +56,12 @@ function App() {
     }
   };
 
+  const handleLinearPattern = () => {
+    if (!isPlaying) {
+      setPattern(generateLinearPattern(currentTimeSignature.beats, measureCount));
+    }
+  };
+
   return (
     <div className="App">
       <h1>Drum Pattern Generator</h1>
@@ -71,6 +78,7 @@ function App() {
         onReset={handleReset}
         onRandomPattern={handleRandomPattern}
         onPresetSelect={handlePresetSelect}
+        onLinearPattern={handleLinearPattern}
       />
 
       <SoundControls

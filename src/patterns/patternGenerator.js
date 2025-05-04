@@ -15,45 +15,36 @@ export const resetPattern = (beats, measures) => {
   return createEmptyPattern(beats, measures);
 };
 
-// generate a random pattern with musical constraints
-export const generateRandomPattern = (beats, measures) => {
-  const pattern = createEmptyPattern(beats, measures);
-  const totalSteps = beats * measures;
-  
-  // Define probabilities for each drum type
-  const probabilities = {
-    0: 0.3,  // Kick drum - less frequent
-    1: 0.25, // Snare drum - less frequent
-    2: 0.6,  // Hi-hat - more frequent
-    3: 0.1,  // Crash - very rare
-    4: 0.15  // Tom - rare
-  };
-  
-  // generate pattern with musical constraints
-  for (let row = 0; row < pattern.length; row++) {
-    for (let col = 0; col < totalSteps; col++) {
-      // skip first step for crash (row 3)
-      if (row === 3 && col === 0) continue;
-      // musical constraints
-      if (row === 0) { // kick drum
-        // higher probability on beats 1 and 3
-        if (col % beats === 0 || col % beats === 2) {
-          pattern[row][col] = Math.random() < 0.7;
-        } else {
-          pattern[row][col] = Math.random() < probabilities[row];
-        }
-      } else if (row === 1) { // snare drum
-        // higher probability on beats 2 and 4
-        if (col % beats === 1 || col % beats === 3) {
-          pattern[row][col] = Math.random() < 0.7;
-        } else {
-          pattern[row][col] = Math.random() < probabilities[row];
-        }
-      } else {
-        pattern[row][col] = Math.random() < probabilities[row];
+// generate a linear pattern with random hits
+export const generateLinearPattern = (beats = 4, measures = 1) => {
+  const totalSteps = beats * measures; // one step per beat
+  const drumWeights = [0.35, 0.35, 0.25, 0.03, 0.02]; // kick, snare, hihat, crash, tom
+
+  // create empty pattern: each drum has an array of steps initialized to false
+  const newPattern = Array.from({ length: drumWeights.length }, () => Array(totalSteps).fill(false));
+
+  for (let step = 0; step < totalSteps; step++) {
+    // for each beat (step), place exactly one hit
+    let r = Math.random();
+    let selectedDrum = 0;
+    for (let i = 0; i < drumWeights.length; i++) {
+      if (r < drumWeights[i]) {
+        selectedDrum = i;
+        break;
       }
+      r -= drumWeights[i];
     }
+
+    // set only the selected drum to true at this step
+    newPattern.forEach((row, idx) => {
+      row[step] = idx === selectedDrum;
+    });
   }
-  
-  return pattern;
+
+  // ensure the first beat starts with kick or snare
+  if (!newPattern[0][0] && !newPattern[1][0]) {
+    newPattern[Math.random() < 0.7 ? 0 : 1][0] = true;
+  }
+
+  return newPattern;
 };

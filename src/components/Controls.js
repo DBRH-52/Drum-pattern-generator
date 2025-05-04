@@ -13,8 +13,9 @@ const Controls = ({
   onMeasureChange,
   onPlayStop,
   onReset,
-  onRandomPattern,
-  onPresetSelect
+  onPresetSelect,
+  onLinearPattern,
+  onRandomPattern
 }) => {
   return (
     <div className="controls">
@@ -120,6 +121,14 @@ const Controls = ({
             </button>
           </div>
         </div>
+
+        <button 
+          className="linear-button" 
+          onClick={onLinearPattern}
+          disabled={isPlaying}
+        >
+          Linear
+        </button>
       </div>
     </div>
   );
