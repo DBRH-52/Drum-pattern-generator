@@ -48,5 +48,3 @@ export const generateLinearPattern = (beats = 4, measures = 1) => {
 
   return newPattern;
 };
-
-

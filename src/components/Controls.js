@@ -14,7 +14,8 @@ const Controls = ({
   onPlayStop,
   onReset,
   onPresetSelect,
-  onLinearPattern
+  onLinearPattern,
+  onRandomPattern
 }) => {
   return (
     <div className="controls">
@@ -97,19 +98,28 @@ const Controls = ({
       <div className="controls-group">
         <div className="preset-control">
           <label htmlFor="preset-select">Pattern Presets</label>
-          <select 
-            id="preset-select"
-            onChange={(e) => onPresetSelect(e.target.value)}
-            className="preset-select"
-            disabled={isPlaying}
-          >
-            <option value="">Select a preset...</option>
-            {Object.entries(patternPresets).map(([key, preset]) => (
-              <option key={key} value={key}>
-                {preset.name}
-              </option>
-            ))}
-          </select>
+          <div className="preset-buttons">
+            <select 
+              id="preset-select"
+              onChange={(e) => onPresetSelect(e.target.value)}
+              className="preset-select"
+              disabled={isPlaying}
+            >
+              <option value="">Select a preset...</option>
+              {Object.entries(patternPresets).map(([key, preset]) => (
+                <option key={key} value={key}>
+                  {preset.name}
+                </option>
+              ))}
+            </select>
+            <button 
+              className="random-button" 
+              onClick={onRandomPattern} 
+              disabled={isPlaying}
+            >
+              Random Pattern
+            </button>
+          </div>
         </div>
 
         <button 
