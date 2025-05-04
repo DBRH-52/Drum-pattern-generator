@@ -28,28 +28,15 @@ export const generateLinearPattern = (beats, measures) => {
     [0, 0, 0, 1]   // 1 hit on the fourth subdivision
   ];
   
-  // for each beat in the pattern
-  for (let beat = 0; beat < totalSteps; beat++) {
-    // 70% chance of having a hit in this beat
-    if (Math.random() < 0.7) {
-      // randomly select which subdivision to place the hit (0-3)
-      const subdivision = Math.floor(Math.random() * 4);
-      
-      // weights for different drums (kick, snare, hi-hat, crash, tom)
-      const drumWeights = [0.3, 0.3, 0.25, 0.05, 0.1];
-      let random = Math.random();
-      let selectedDrum = 0;
-      
-      // select drum based on weights
-      for (let i = 0; i < drumWeights.length; i++) {
-        if (random < drumWeights[i]) {
-          selectedDrum = i;
-          break;
-        }
-        random -= drumWeights[i];
-      }
-      // place the hit - only one drum at this exact step
-      newPattern[selectedDrum][beat] = true;
+  for (let measure = 0; measure < measures; measure++) {
+    for (let beat = 0; beat < beats; beat++) {
+      const step = measure * beats + beat;
+      // randomly select a drum for this step
+      const selectedDrum = Math.floor(Math.random() * newPattern.length);
+      // set only one drum per step
+      newPattern.forEach((row, drumIdx) => {
+        row[step] = drumIdx === selectedDrum;
+      });
     }
   }
   
