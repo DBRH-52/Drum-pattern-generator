@@ -1,9 +1,9 @@
 import React from 'react';
-import { DRUM_KITS } from '../audio/drumKits';
 
-const SoundControls = ({ 
-  currentKit, 
-  onKitChange
+const SoundControlsView = ({ 
+    currentKit, 
+    onKitChange, 
+    kits 
 }) => {
   return (
     <div className="sound-controls">
@@ -13,7 +13,7 @@ const SoundControls = ({
           value={currentKit} 
           onChange={(e) => onKitChange(e.target.value)}
         >
-          {Object.entries(DRUM_KITS).map(([id, kit]) => (
+          {Object.entries(kits).map(([id, kit]) => (
             <option key={id} value={id}>
               {kit.name}
             </option>
@@ -24,4 +24,4 @@ const SoundControls = ({
   );
 };
 
-export default SoundControls; 
+export default SoundControlsView;

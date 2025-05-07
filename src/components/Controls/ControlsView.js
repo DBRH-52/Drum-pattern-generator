@@ -1,21 +1,21 @@
 import React from 'react';
-import { timeSignatures } from '../patterns/timeSignatures';
-import { patternPresets } from '../patterns/patternPresets';
-import { MIN_TEMPO, MAX_TEMPO, MIN_MEASURES, MAX_MEASURES } from '../utils/constants';
+import { timeSignatures } from '../../patterns/timeSignatures';
+import { patternPresets } from '../../patterns/patternPresets';
+import { MIN_TEMPO, MAX_TEMPO, MIN_MEASURES, MAX_MEASURES } from '../../utils/constants';
 
-const Controls = ({
-  tempo,
-  isPlaying,
-  currentTimeSignature,
-  measureCount,
-  onTempoChange,
-  onTimeSignatureChange,
-  onMeasureChange,
-  onPlayStop,
-  onReset,
-  onPresetSelect,
-  onLinearPattern,
-  onRandomPattern
+const ControlsView = ({
+    tempo,
+    isPlaying,
+    currentTimeSignature,
+    measureCount,
+    onTempoChange,
+    onTimeSignatureChange,
+    onMeasureChange,
+    onPlayStop,
+    onReset,
+    onPresetSelect,
+    onLinearPattern,
+    onRandomPattern,
 }) => {
   return (
     <div className="controls">
@@ -134,4 +134,4 @@ const Controls = ({
   );
 };
 
-export default Controls;
+export default ControlsView;

@@ -1,15 +1,9 @@
 import React from 'react';
-import BeatNumbers from './BeatNumbers';
-import DrumRow from './DrumRow';
 
-const DrumGrid = ({
-  pattern,
-  currentTimeSignature,
-  measureCount,
-  currentStep,
-  isPlaying,
-  onToggleStep,
-  onPlaySound
+const DrumGridView = ({
+  measureIndicators,
+  BeatNumbersComponent,
+  DrumRows
 }) => {
   return (
     <div className="drum-grid">
@@ -28,12 +22,12 @@ const DrumGrid = ({
           </div>
         ))}
       </div>
-      
+
       <BeatNumbers 
         currentTimeSignature={currentTimeSignature}
         measureCount={measureCount}
       />
-      
+
       {pattern.map((row, rowIndex) => (
         <DrumRow
           key={rowIndex}
@@ -50,4 +44,4 @@ const DrumGrid = ({
   );
 };
 
-export default DrumGrid;
+export default DrumGridView;
