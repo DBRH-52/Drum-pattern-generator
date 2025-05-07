@@ -1,0 +1,37 @@
+.drum-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px auto;
+    max-width: 600px;
+  }
+  
+  .drum-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .drum-cell {
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--primary-color);
+    background-color: var(--background-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .drum-cell:hover {
+    background-color: var(--hover-color);
+  }
+  
+  .drum-cell.active {
+    background-color: var(--primary-color);
+  }
+  
+  .drum-cell.current {
+    box-shadow: 0 0 10px #ff9500;
+  }
+  

@@ -1,0 +1,46 @@
+.tempo-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 180px;
+  }
+  
+  .tempo-control label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: var(--primary-color);
+  }
+  
+  .tempo-slider {
+    width: 100%;
+    height: 8px;
+    background: #3a3f4b;
+    outline: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .tempo-slider::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  .tempo-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  .tempo-slider::-webkit-slider-thumb:hover,
+  .tempo-slider::-moz-range-thumb:hover {
+    background: #4fa8d8;
+    transform: scale(1.1);
+  }
+  
