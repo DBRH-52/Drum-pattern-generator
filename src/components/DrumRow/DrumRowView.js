@@ -1,4 +1,5 @@
 import React from 'react';
+import { DRUM_SOUNDS } from '../../utils/constants';
 
 const DrumRowView = ({
   rowIndex,

@@ -1,7 +1,7 @@
 import React from 'react';
 import DrumGridView from './DrumGridView';
-import BeatNumbers from './BeatNumbers/BeatNumbers';
-import DrumRow from './DrumRow';
+import BeatNumbers from '../BeatNumbers/BeatNumbers';
+import DrumRow from '../DrumRow/DrumRow';
 
 const DrumGrid = ({
   pattern,

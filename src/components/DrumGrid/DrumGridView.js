@@ -1,6 +1,15 @@
 import React from 'react';
+import BeatNumbers from '../BeatNumbers/BeatNumbers';
+import DrumRow from '../DrumRow/DrumRow';
 
 const DrumGridView = ({
+  pattern,
+  currentTimeSignature,
+  measureCount,
+  currentStep,
+  isPlaying,
+  onToggleStep,
+  onPlaySound,
   measureIndicators,
   BeatNumbersComponent,
   DrumRows

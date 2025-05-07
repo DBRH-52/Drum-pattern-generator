@@ -1,17 +1,14 @@
 import React from 'react';
 import './App.css';
 
-// components
-import DrumGrid from './components/DrumGrid';
-import Controls from './components/Controls';
-import SoundControls from './components/SoundControls';
+import DrumGrid from './components/DrumGrid/DrumGrid';
+import Controls from './components/Controls/Controls';
+import SoundControls from './components/SoundControls/SoundControls';
 
-// hooks
 import { useAudio } from './hooks/useAudio';
 import { useDrumPattern } from './hooks/useDrumPattern';
 import { useSequencer } from './hooks/useSequencer';
 
-// patterns
 import { patternPresets } from './patterns/patternPresets';
 import { generateLinearPattern } from './patterns/patternGenerator';
 

@@ -15,6 +15,14 @@ export const resetPattern = (beats, measures) => {
   return createEmptyPattern(beats, measures);
 };
 
+export const generateRandomPattern = (beats = 4, measures = 1) => {
+  const totalSteps = beats * measures;
+  const newPattern = Array(5).fill().map(() =>
+    Array.from({ length: totalSteps }, () => Math.random() < 0.25)
+  );
+  return newPattern;
+};
+
 // generate a linear pattern with random hits
 export const generateLinearPattern = (beats = 4, measures = 1) => {
   const totalSteps = beats * measures; // one step per beat
