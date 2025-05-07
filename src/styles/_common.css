@@ -1,0 +1,10 @@
+:root {
+    --primary-color: #61dafb;
+    --background-color: #282c34;
+    --hover-color: #3a3f4b;
+  }
+  
+  .drum-label, .measure-label, .measure-count {
+    font-weight: bold;
+    color: var(--primary-color);
+  }

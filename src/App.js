@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './styles/main.css';
 
 import DrumGrid from './components/DrumGrid/DrumGrid';
 import Controls from './components/Controls/Controls';
