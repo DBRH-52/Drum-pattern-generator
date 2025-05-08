@@ -3,16 +3,19 @@ import * as Tone from 'tone';
 import { createSequence, startSequence, stopSequence, setTempo } from '../audio/sequencer';
 
 export const useSequencer = (pattern, samplerRef, tempo) => {
+  // State - whether playback is currently running
   const [isPlaying, setIsPlaying] = useState(false);
+  // State - which step (col) is currently active
   const [currentStep, setCurrentStep] = useState(0);
+  // Ref to the current sequence (control playback)
   const sequencerRef = useRef(null);
 
-  // update tempo whenever it changes
+  // Update Tone.js tempo - when the user changes the tempo slider
   useEffect(() => {
     setTempo(tempo);
   }, [tempo]);
 
-  // cleanup on unmount
+  // Dispose the sequencer when this hook/component unmounts
   useEffect(() => {
     return () => {
       if (sequencerRef.current) {
@@ -21,28 +24,29 @@ export const useSequencer = (pattern, samplerRef, tempo) => {
     };
   }, []);
 
-  // handle play/stop
+  // Handle play/stop button click
   const handlePlayStop = async (initializeAudio) => {
     if (!isPlaying) {
+      // Ensure Tone.js is started before playing (required by browser)
       await initializeAudio();
       setIsPlaying(true);
       
+      // Create the sequencer for the current pattern and tempo
       sequencerRef.current = createSequence(
         pattern,
         samplerRef.current,
         setCurrentStep,
         tempo
       );
-      
       startSequence(sequencerRef.current);
-    } else {
+    } 
+    else {
       stopSequence(sequencerRef.current);
       setIsPlaying(false);
       setCurrentStep(0);
     }
   };
 
-  // stop sequence
   const stop = () => {
     if (sequencerRef.current) {
       stopSequence(sequencerRef.current);

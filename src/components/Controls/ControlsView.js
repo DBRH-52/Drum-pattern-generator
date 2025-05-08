@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { timeSignatures } from '../../patterns/timeSignatures';
 import { patternPresets } from '../../patterns/patternPresets';
 import { MIN_TEMPO, MAX_TEMPO, MIN_MEASURES, MAX_MEASURES } from '../../utils/constants';
@@ -19,6 +20,8 @@ const ControlsView = ({
 }) => {
   return (
     <div className="controls">
+
+      {/* Playback controls group */}
       <div className="controls-group">
         <button className="play-button" onClick={onPlayStop}>
           {isPlaying ? 'Stop' : 'Play'}
@@ -34,8 +37,11 @@ const ControlsView = ({
       </div>
       
       <div className="divider"></div>
-      
+
+      {/* Time signature and measure controls */}
       <div className="controls-group">
+
+        {/* Time signature dropdown */}
         <div className="time-signature-control">
           <label htmlFor="time-signature-select">Time Signature</label>
           <select 
@@ -53,6 +59,7 @@ const ControlsView = ({
           </select>
         </div>
         
+        {/* Measure count controls */}
         <div className="measure-control">
           <label>Measures</label>
           <div className="measure-buttons">
@@ -77,6 +84,7 @@ const ControlsView = ({
       
       <div className="divider"></div>
       
+      {/* Tempo control */}
       <div className="controls-group">
         <div className="tempo-control">
           <label htmlFor="tempo-slider">Tempo: {tempo} BPM</label>
@@ -95,6 +103,7 @@ const ControlsView = ({
 
       <div className="divider"></div>
 
+      {/* Pattern presets & randomizer */}
       <div className="controls-group">
         <div className="preset-control">
           <label htmlFor="preset-select">Pattern Presets</label>
@@ -112,6 +121,8 @@ const ControlsView = ({
                 </option>
               ))}
             </select>
+
+            {/* Random pattern button */}
             <button 
               className="random-button" 
               onClick={onRandomPattern} 
@@ -122,6 +133,7 @@ const ControlsView = ({
           </div>
         </div>
 
+        {/* Linear pattern button */}
         <button 
           className="linear-button" 
           onClick={onLinearPattern}

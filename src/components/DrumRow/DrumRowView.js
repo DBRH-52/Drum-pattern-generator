@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { DRUM_SOUNDS } from '../../utils/constants';
 
 const DrumRowView = ({
@@ -13,6 +14,8 @@ const DrumRowView = ({
 }) => {
     return (
         <div className="drum-row">
+
+          {/* Drum label with click-to-preview feature */}
           <div 
             className="drum-label clickable" 
             onClick={() => onPlaySound(rowIndex)}
@@ -20,6 +23,8 @@ const DrumRowView = ({
           >
             {DRUM_SOUNDS[rowIndex]}
           </div>
+
+          {/* Render each beat step as a toggleable button */}
           {row.map((isActive, colIndex) => (
             <button
               key={`${rowIndex}-${colIndex}`}

@@ -16,7 +16,8 @@ const DrumGridView = ({
 }) => {
   return (
     <div className="drum-grid">
-      {/* measure indicators */}
+
+      {/* Render measure indicators */}
       <div className="measure-indicators">
         <div className="drum-label"></div>
         {Array.from({ length: measureCount }).map((_, index) => (
@@ -32,11 +33,13 @@ const DrumGridView = ({
         ))}
       </div>
 
+      {/* Beat number row */}
       <BeatNumbers 
         currentTimeSignature={currentTimeSignature}
         measureCount={measureCount}
       />
 
+      {/* Render a DrumRow for each instrument in the pattern */}
       {pattern.map((row, rowIndex) => (
         <DrumRow
           key={rowIndex}

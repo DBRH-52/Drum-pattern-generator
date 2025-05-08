@@ -1,14 +1,13 @@
 import * as Tone from 'tone';
 
-// initialize Tone.js audio context
 export const initializeAudio = async () => {
   await Tone.start();
   return true;
 };
 
-// create and configure the sampler
 export const createSampler = () => {
   return new Tone.Sampler({
+    // Map MIDI notes with .wav files
     urls: {
       C2: "kick.wav",
       D2: "snare.wav",
@@ -20,5 +19,6 @@ export const createSampler = () => {
       console.log("Sampler loaded!");
     },
     baseUrl: "/sounds/"
+    // Route the output of the sampler directly to the audio destination
   }).toDestination();
 };

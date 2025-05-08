@@ -9,8 +9,10 @@ import { useAudio } from './hooks/useAudio';
 import { useDrumPattern } from './hooks/useDrumPattern';
 import { useSequencer } from './hooks/useSequencer';
 
-import { patternPresets } from './patterns/patternPresets';
-import { generateLinearPattern } from './patterns/patternGenerator';
+import { handlePresetSelect, 
+         handleLinearPattern, 
+         handleRandomPattern 
+       } from './patterns/patternController';
 
 function App() {
   const {
@@ -23,7 +25,6 @@ function App() {
     handleToggleStep,
     handleTempoChange,
     handleReset,
-    handleRandomPattern,
     setPattern
   } = useDrumPattern();
 
@@ -44,25 +45,21 @@ function App() {
     stop
   } = useSequencer(pattern, samplerRef, tempo);
 
-  const handlePresetSelect = (presetName) => {
-    if (!presetName) return;
-    
-    const preset = patternPresets[presetName];
-    if (preset && preset.timeSignature === currentTimeSignature.id) {
-      setPattern(preset.pattern);
-    }
+  const handlePresetSelectClick = (presetName) => {
+    handlePresetSelect(presetName, currentTimeSignature, setPattern);
   };
-
-  const handleLinearPattern = () => {
-    if (!isPlaying) {
-      setPattern(generateLinearPattern(currentTimeSignature.beats, measureCount));
-    }
+  const handleLinearPatternClick = () => {
+    handleLinearPattern(isPlaying, currentTimeSignature, measureCount, setPattern);
+  };
+  const handleRandomPatternClick = () => {
+    handleRandomPattern(isPlaying, currentTimeSignature, measureCount, setPattern);
   };
 
   return (
     <div className="App">
       <h1>Drum Pattern Generator</h1>
       
+      {/* Controls component, passing props related to tempo, time signature, measure count etc */}
       <Controls
         tempo={tempo}
         isPlaying={isPlaying}
@@ -73,16 +70,18 @@ function App() {
         onMeasureChange={handleMeasureChange}
         onPlayStop={() => handlePlayStop(initializeAudio)}
         onReset={handleReset}
-        onRandomPattern={handleRandomPattern}
-        onPresetSelect={handlePresetSelect}
-        onLinearPattern={handleLinearPattern}
+        onPresetSelect={handlePresetSelectClick}
+        onLinearPattern={handleLinearPatternClick}
+        onRandomPattern={handleRandomPatternClick}
       />
 
+      {/* Sound controls component for changing the drum kit */}
       <SoundControls
         currentKit={currentKit}
         onKitChange={changeKit}
       />
       
+      {/* DrumGrid component to display the pattern and allow interaction */}
       <DrumGrid
         pattern={pattern}
         currentTimeSignature={currentTimeSignature}

@@ -7,8 +7,11 @@ const SoundControlsView = ({
 }) => {
   return (
     <div className="sound-controls">
+
       <div className="kit-selector">
         <h3>Drum Kit</h3>
+
+        {/* Dropdown to select a kit */}
         <select 
           value={currentKit} 
           onChange={(e) => onKitChange(e.target.value)}
