@@ -3,7 +3,6 @@ import './styles/main.css';
 
 import DrumGrid from './components/DrumGrid/DrumGrid.js';
 import Controls from './components/Controls/Controls.js';
-import SoundControls from './components/SoundControls/SoundControls.js';
 
 import { useAudio } from './hooks/useAudio.js';
 import { useDrumPattern } from './hooks/useDrumPattern.js';
@@ -65,6 +64,7 @@ function App() {
         isPlaying={isPlaying}
         currentTimeSignature={currentTimeSignature}
         measureCount={measureCount}
+        currentKit={currentKit}
         onTempoChange={handleTempoChange}
         onTimeSignatureChange={handleTimeSignatureChange}
         onMeasureChange={handleMeasureChange}
@@ -73,11 +73,6 @@ function App() {
         onPresetSelect={handlePresetSelectClick}
         onLinearPattern={handleLinearPatternClick}
         onRandomPattern={handleRandomPatternClick}
-      />
-
-      {/* Sound controls component for changing the drum kit */}
-      <SoundControls
-        currentKit={currentKit}
         onKitChange={changeKit}
       />
       
