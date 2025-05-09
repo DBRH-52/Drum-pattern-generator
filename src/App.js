@@ -1,18 +1,18 @@
 import React from 'react';
 import './styles/main.css';
 
-import DrumGrid from './components/DrumGrid/DrumGrid';
-import Controls from './components/Controls/Controls';
-import SoundControls from './components/SoundControls/SoundControls';
+import DrumGrid from './components/DrumGrid/DrumGrid.js';
+import Controls from './components/Controls/Controls.js';
+import SoundControls from './components/SoundControls/SoundControls.js';
 
-import { useAudio } from './hooks/useAudio';
-import { useDrumPattern } from './hooks/useDrumPattern';
-import { useSequencer } from './hooks/useSequencer';
+import { useAudio } from './hooks/useAudio.js';
+import { useDrumPattern } from './hooks/useDrumPattern.js';
+import { useSequencer } from './hooks/useSequencer.js';
 
 import { handlePresetSelect, 
          handleLinearPattern, 
          handleRandomPattern 
-       } from './patterns/patternController';
+       } from './patterns/patternController.js';
 
 function App() {
   const {
