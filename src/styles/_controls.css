@@ -1,14 +1,24 @@
-.controls {
+.controls-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 30px auto;
+    max-width: 1000px;
+  }
+  
+  .controls {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 20px;
-    margin: 30px auto;
-    max-width: 1000px;
     padding: 15px;
-    background-color: rgba(97, 211, 251, 0.02);
+    background-color: var(--controls-bg);
     border-radius: 20px;
+  }
+  
+  .controls-row {
+    width: 100%;
   }
   
   .controls-group {
@@ -18,13 +28,13 @@
     padding: 0 15px;
     border-radius: 15px;
     margin: 0;
-    height: 80px;
+    min-height: 80px;
   }
   
   .divider {
     height: 50px;
     width: 1px;
-    background-color: rgba(97, 211, 251, 0.3);
+    background-color: var(--grid-color);
     margin: 0 5px;
   }
   
@@ -34,6 +44,9 @@
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
+    border: none;
+    letter-spacing: 1px;
+    font-weight: 500;
   }
   
   .play-button {
@@ -42,16 +55,258 @@
   }
   
   .play-button:hover {
-    background-color: #4fa8d8;
+    background-color: var(--hover-color);
     transform: translateY(-2px);
   }
   
   .reset-button {
     background-color: #e05a5a;
-    color: white;
+    color: var(--background-color);
   }
   
   .reset-button:hover:not(:disabled) {
     background-color: #d04545;
+  }
+  
+  .time-signature-control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .time-signature-control label {
+    color: var(--text-color);
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .time-signature-select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 2px solid var(--primary-color);
+    background-color: var(--controls-bg);
+    color: var(--text-color);
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .time-signature-select:hover:not(:disabled) {
+    background-color: var(--grid-color);
+    border-color: var(--hover-color);
+  }
+  
+  .measure-control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .measure-control label {
+    color: var(--text-color);
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .measure-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .measure-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+  }
+  
+  .measure-button:hover:not(:disabled) {
+    background-color: var(--hover-color);
+    transform: scale(1.1);
+  }
+  
+  .measure-count {
+    font-size: 18px;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+    color: var(--text-color);
+  }
+  
+  .tempo-control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 200px;
+  }
+  
+  .tempo-control label {
+    color: var(--text-color);
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .tempo-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--grid-color);
+    outline: none;
+  }
+  
+  .tempo-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .tempo-slider::-webkit-slider-thumb:hover {
+    background-color: var(--hover-color);
+    transform: scale(1.2);
+  }
+  
+  .tempo-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .tempo-slider::-moz-range-thumb:hover {
+    background-color: var(--hover-color);
+    transform: scale(1.2);
+  }
+  
+  .preset-control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .preset-control label {
+    color: var(--text-color);
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .preset-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .preset-select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 2px solid var(--primary-color);
+    background-color: var(--controls-bg);
+    color: var(--text-color);
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 180px;
+  }
+  
+  .preset-select:hover:not(:disabled) {
+    background-color: var(--grid-color);
+    border-color: var(--hover-color);
+  }
+  
+  .random-button, .linear-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  
+  .random-button:hover:not(:disabled), .linear-button:hover:not(:disabled) {
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+  }
+  
+  .linear-button {
+    background-color: var(--primary-color);
+    min-width: 120px;
+  }
+  
+  .linear-button:hover:not(:disabled) {
+    background-color: var(--hover-color);
+  }
+  
+  .kit-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .kit-selector label {
+    color: var(--text-color);
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .kit-selector select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 2px solid var(--primary-color);
+    background-color: var(--controls-bg);
+    color: var(--text-color);
+    font-size: 15px;
+    min-width: 150px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .kit-selector select:hover:not(:disabled) {
+    background-color: var(--grid-color);
+    border-color: var(--hover-color);
+  }
+  
+  .sound-controls {
+    display: none;
+  }
+
+  button:disabled, select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
   

@@ -1,10 +1,40 @@
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
 :root {
-    --primary-color: #61dafb;
-    --background-color: #282c34;
-    --hover-color: #3a3f4b;
+    /* Color Palette */
+    --background-color: #1A1A1A;    /* 🖤 Charcoal Black - main background */
+    --text-color: #E0E0E0;          /* 🔳 Cool Gray - font color */
+    --grid-color: #2F2F2F;          /* 🟦 Steely Slate - drum grid */
+    --controls-bg: #252525;         /* 🔘 Graphite - controls background */
+    --primary-color: #FF6A00;       /* 🟧 Signal Orange - interactive elements */
+    --hover-color: #FF8533;         /* Lighter orange for hover states */
+    --active-color: #FF4D00;        /* Darker orange for active states */
+    --accent-color: #FF6A00;        /* Accent for highlights and special elements */
+    
+    /* Font */
+    --main-font: 'Orbitron', sans-serif;
+  }
+  
+  * {
+    font-family: var(--main-font);
   }
   
   .drum-label, .measure-label, .measure-count {
     font-weight: bold;
-    color: var(--primary-color);
+    color: var(--text-color);
+  }
+
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    font-family: var(--main-font);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+    font-family: var(--main-font);
+    letter-spacing: 1px;
   }
