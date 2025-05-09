@@ -10,27 +10,44 @@ const DrumGridView = ({
   isPlaying,
   onToggleStep,
   onPlaySound,
-  measureIndicators,
-  BeatNumbersComponent,
-  DrumRows
 }) => {
+  // Calculate the number of beats per measure FOR SPACING
+  const beatsPerMeasure = currentTimeSignature?.beats || 4;
+  
+  // Array of properly spaced measure labels 
+  const renderMeasureLabels = () => {
+    const labels = [];
+    
+    // Add empty drum label for spacing
+    labels.push(
+      <div key="empty-label" className="drum-label"></div>
+    );
+    
+    // For each measure -> create a label spanning the correct number of beats
+    for (let i = 0; i < measureCount; i++) {
+      // Each measure label spans multiple beat cells
+      labels.push(
+        <div 
+          key={`measure-${i}`} 
+          className="measure-label"
+          style={{ 
+            width: `${(beatsPerMeasure * 50) + ((beatsPerMeasure - 1) * 10)}px`,
+            marginRight: i === measureCount - 1 ? '0' : '0',
+          }}
+        >
+          Measure {i + 1}
+        </div>
+      );
+    }
+    
+    return labels;
+  };
+  
   return (
     <div className="drum-grid">
-
       {/* Render measure indicators */}
       <div className="measure-indicators">
-        <div className="drum-label"></div>
-        {Array.from({ length: measureCount }).map((_, index) => (
-          <div 
-            key={index} 
-            className="measure-label"
-            style={{ 
-              width: `${currentTimeSignature.beats * 50 + (currentTimeSignature.beats - 1) * 10}px`
-            }}
-          >
-            Measure {index + 1}
-          </div>
-        ))}
+        {renderMeasureLabels()}
       </div>
 
       {/* Beat number row */}
