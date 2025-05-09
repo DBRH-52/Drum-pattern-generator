@@ -45,6 +45,8 @@
     cursor: pointer;
     transition: all 0.3s ease;
     border: none;
+    letter-spacing: 1px;
+    font-weight: 500;
   }
   
   .play-button {
@@ -74,9 +76,11 @@
   
   .time-signature-control label {
     color: var(--text-color);
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 500;
     text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
   }
   
   .time-signature-select {
@@ -104,8 +108,11 @@
   
   .measure-control label {
     color: var(--text-color);
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
   }
   
   .measure-buttons {
@@ -151,9 +158,11 @@
   
   .tempo-control label {
     color: var(--text-color);
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 500;
     text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
   }
   
   .tempo-slider {
@@ -203,9 +212,11 @@
   
   .preset-control label {
     color: var(--text-color);
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 500;
     text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
   }
   
   .preset-buttons {
@@ -266,9 +277,11 @@
   
   .kit-selector label {
     color: var(--text-color);
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 500;
     text-align: center;
+    letter-spacing: 1px;
+    text-transform: uppercase;
   }
   
   .kit-selector select {
