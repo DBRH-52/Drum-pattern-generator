@@ -13,7 +13,7 @@
     justify-content: center;
     gap: 20px;
     padding: 15px;
-    background-color: rgba(97, 211, 251, 0.02);
+    background-color: var(--controls-bg);
     border-radius: 20px;
   }
   
@@ -34,7 +34,7 @@
   .divider {
     height: 50px;
     width: 1px;
-    background-color: rgba(97, 211, 251, 0.3);
+    background-color: var(--grid-color);
     margin: 0 5px;
   }
   
@@ -44,6 +44,7 @@
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
+    border: none;
   }
   
   .play-button {
@@ -52,13 +53,13 @@
   }
   
   .play-button:hover {
-    background-color: #4fa8d8;
+    background-color: var(--hover-color);
     transform: translateY(-2px);
   }
   
   .reset-button {
     background-color: #e05a5a;
-    color: white;
+    color: var(--background-color);
   }
   
   .reset-button:hover:not(:disabled) {
@@ -72,7 +73,7 @@
   }
   
   .time-signature-control label {
-    color: var(--primary-color);
+    color: var(--text-color);
     font-size: 14px;
     font-weight: bold;
     text-align: center;
@@ -82,15 +83,16 @@
     padding: 8px 12px;
     border-radius: 6px;
     border: 2px solid var(--primary-color);
-    background-color: var(--background-color);
-    color: var(--primary-color);
+    background-color: var(--controls-bg);
+    color: var(--text-color);
     font-size: 15px;
     cursor: pointer;
     transition: all 0.2s ease;
   }
   
   .time-signature-select:hover:not(:disabled) {
-    background-color: rgba(97, 211, 251, 0.1);
+    background-color: var(--grid-color);
+    border-color: var(--hover-color);
   }
   
   .measure-control {
@@ -101,7 +103,7 @@
   }
   
   .measure-control label {
-    color: var(--primary-color);
+    color: var(--text-color);
     font-size: 14px;
     font-weight: bold;
   }
@@ -128,7 +130,7 @@
   }
   
   .measure-button:hover:not(:disabled) {
-    background-color: #4fa8d8;
+    background-color: var(--hover-color);
     transform: scale(1.1);
   }
   
@@ -137,7 +139,7 @@
     font-weight: bold;
     min-width: 30px;
     text-align: center;
-    color: var(--primary-color);
+    color: var(--text-color);
   }
   
   .tempo-control {
@@ -148,7 +150,7 @@
   }
   
   .tempo-control label {
-    color: var(--primary-color);
+    color: var(--text-color);
     font-size: 14px;
     font-weight: bold;
     text-align: center;
@@ -159,7 +161,7 @@
     width: 100%;
     height: 6px;
     border-radius: 3px;
-    background: #444;
+    background: var(--grid-color);
     outline: none;
   }
   
@@ -175,7 +177,7 @@
   }
   
   .tempo-slider::-webkit-slider-thumb:hover {
-    background-color: #4fa8d8;
+    background-color: var(--hover-color);
     transform: scale(1.2);
   }
   
@@ -189,7 +191,7 @@
   }
   
   .tempo-slider::-moz-range-thumb:hover {
-    background-color: #4fa8d8;
+    background-color: var(--hover-color);
     transform: scale(1.2);
   }
   
@@ -200,7 +202,7 @@
   }
   
   .preset-control label {
-    color: var(--primary-color);
+    color: var(--text-color);
     font-size: 14px;
     font-weight: bold;
     text-align: center;
@@ -216,8 +218,8 @@
     padding: 8px 12px;
     border-radius: 6px;
     border: 2px solid var(--primary-color);
-    background-color: var(--background-color);
-    color: var(--primary-color);
+    background-color: var(--controls-bg);
+    color: var(--text-color);
     font-size: 15px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -225,14 +227,15 @@
   }
   
   .preset-select:hover:not(:disabled) {
-    background-color: rgba(97, 211, 251, 0.1);
+    background-color: var(--grid-color);
+    border-color: var(--hover-color);
   }
   
   .random-button, .linear-button {
     padding: 8px 16px;
     border-radius: 6px;
-    background-color: #6c5ce7;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--background-color);
     font-size: 14px;
     border: none;
     cursor: pointer;
@@ -241,17 +244,17 @@
   }
   
   .random-button:hover:not(:disabled), .linear-button:hover:not(:disabled) {
-    background-color: #5649c0;
+    background-color: var(--hover-color);
     transform: translateY(-2px);
   }
   
   .linear-button {
-    background-color: #00b894;
+    background-color: var(--primary-color);
     min-width: 120px;
   }
   
   .linear-button:hover:not(:disabled) {
-    background-color: #00a381;
+    background-color: var(--hover-color);
   }
   
   .kit-selector {
@@ -262,7 +265,7 @@
   }
   
   .kit-selector label {
-    color: var(--primary-color);
+    color: var(--text-color);
     font-size: 14px;
     font-weight: bold;
     text-align: center;
@@ -272,8 +275,8 @@
     padding: 8px 12px;
     border-radius: 6px;
     border: 2px solid var(--primary-color);
-    background-color: var(--background-color);
-    color: var(--primary-color);
+    background-color: var(--controls-bg);
+    color: var(--text-color);
     font-size: 15px;
     min-width: 150px;
     cursor: pointer;
@@ -281,7 +284,8 @@
   }
   
   .kit-selector select:hover:not(:disabled) {
-    background-color: rgba(97, 211, 251, 0.1);
+    background-color: var(--grid-color);
+    border-color: var(--hover-color);
   }
   
   .sound-controls {

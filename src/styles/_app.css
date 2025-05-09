@@ -1,13 +1,16 @@
 .App {
     text-align: center;
     padding: 20px;
-    background-color: #282c34;
+    background-color: var(--background-color);
     min-height: 100vh;
+    font-family: 'Roboto', sans-serif;
     color: white;
   }
   
-  h1 {
-    color: #61dafb;
+  .App h1 {
+    color: var(--text-color);
+    margin-top: 10px;
     margin-bottom: 30px;
+    font-size: 2.5rem;
   }
   
