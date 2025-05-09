@@ -12,6 +12,11 @@
     --active-color: #FF4D00;        /* Darker orange for active states */
     --accent-color: #FF6A00;        /* Accent for highlights and special elements */
     
+    /* Grid pattern */
+    --grid-pattern: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    --grid-size: 20px;
+    
     /* Font */
     --main-font: 'Orbitron', sans-serif;
   }

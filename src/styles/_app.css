@@ -2,6 +2,9 @@
     text-align: center;
     padding: 20px;
     background-color: var(--background-color);
+    background-image: var(--grid-pattern);
+    background-size: calc(var(--grid-size) * 2) calc(var(--grid-size) * 2);
+    background-position: center;
     min-height: 100vh;
     color: var(--text-color);
   }
@@ -14,6 +17,17 @@
     letter-spacing: 2px;
     font-weight: 700;
     text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .App h1:after {
+    content: "";
+    display: block;
+    width: 150px;
+    height: 3px;
+    background-color: var(--primary-color);
+    margin: 15px auto 0;
+    box-shadow: var(--primary-glow);
   }
   
   /* Font comparison section */

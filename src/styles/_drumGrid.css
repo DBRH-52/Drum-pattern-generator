@@ -5,6 +5,11 @@
     margin: 20px auto;
     max-width: 800px;
     background-color: var(--background-color);
+    background-image: var(--grid-pattern);
+    background-size: var(--grid-size) var(--grid-size);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
   
   .drum-row, .beat-numbers, .measure-indicators {
@@ -32,16 +37,33 @@
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .drum-cell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.03) 75%, transparent 75%, transparent);
+    background-size: 10px 10px;
+    opacity: 0.2;
   }
   
   .drum-cell:hover {
     background-color: var(--hover-color);
     border-color: var(--hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
   
   .drum-cell.active {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
+    box-shadow: var(--primary-glow);
   }
   
   .drum-cell.current {
@@ -67,6 +89,7 @@
     top: 0;
     height: 100%;
     border-left: 2px solid var(--accent-color);
+    box-shadow: 0 0 5px rgba(255, 106, 0, 0.3);
   }
   
   .measure-label {
@@ -74,5 +97,8 @@
     color: var(--text-color);
     font-weight: bold;
     padding: 5px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
   }
   

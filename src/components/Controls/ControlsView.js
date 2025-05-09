@@ -134,7 +134,7 @@ const ControlsView = ({
         {/* Measure count controls */}
         <div className="controls-group">
           <div className="measure-control">
-            <label>Measures</label>
+            <label className="measure-label">Measures</label>
             <div className="measure-buttons">
               <button 
                 onClick={() => onMeasureChange(measureCount - 1)} 
@@ -160,7 +160,7 @@ const ControlsView = ({
         {/* Tempo control */}
         <div className="controls-group">
           <div className="tempo-control">
-            <label htmlFor="tempo-slider">Tempo: {tempo} BPM</label>
+            <label htmlFor="tempo-slider"><span className="tempo-label">Tempo:</span> <span className="tempo-value">{tempo} BPM</span></label>
             <input 
               id="tempo-slider"
               type="range"

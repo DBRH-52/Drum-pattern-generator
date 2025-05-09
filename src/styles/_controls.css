@@ -6,7 +6,7 @@
     max-width: 1000px;
   }
   
-  .controls {
+.controls {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -14,7 +14,10 @@
     gap: 20px;
     padding: 15px;
     background-color: var(--controls-bg);
+    background-image: var(--grid-pattern);
+    background-size: var(--grid-size) var(--grid-size);
     border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
   
   .controls-row {
@@ -29,6 +32,21 @@
     border-radius: 15px;
     margin: 0;
     min-height: 80px;
+    position: relative;
+  }
+  
+  .controls-group::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.02) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.02) 75%, transparent 75%, transparent);
+    background-size: 15px 15px;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 0;
   }
   
   .divider {
@@ -57,6 +75,7 @@
   .play-button:hover {
     background-color: var(--hover-color);
     transform: translateY(-2px);
+    box-shadow: var(--primary-glow);
   }
   
   .reset-button {
@@ -66,6 +85,7 @@
   
   .reset-button:hover:not(:disabled) {
     background-color: #d04545;
+    box-shadow: 0 0 8px rgba(224, 90, 90, 0.6);
   }
   
   .time-signature-control {
@@ -75,7 +95,7 @@
   }
   
   .time-signature-control label {
-    color: var(--text-color);
+    color: white;
     font-size: 13px;
     font-weight: 500;
     text-align: center;
@@ -107,7 +127,7 @@
   }
   
   .measure-control label {
-    color: var(--text-color);
+    color: white;
     font-size: 13px;
     font-weight: 500;
     text-align: center;
@@ -146,7 +166,7 @@
     font-weight: bold;
     min-width: 30px;
     text-align: center;
-    color: var(--text-color);
+    color: var(--primary-color);
   }
   
   .tempo-control {
@@ -157,7 +177,7 @@
   }
   
   .tempo-control label {
-    color: var(--text-color);
+    color: white;
     font-size: 13px;
     font-weight: 500;
     text-align: center;
@@ -211,7 +231,7 @@
   }
   
   .preset-control label {
-    color: var(--text-color);
+    color: white;
     font-size: 13px;
     font-weight: 500;
     text-align: center;
@@ -257,6 +277,7 @@
   .random-button:hover:not(:disabled), .linear-button:hover:not(:disabled) {
     background-color: var(--hover-color);
     transform: translateY(-2px);
+    box-shadow: var(--primary-glow);
   }
   
   .linear-button {
@@ -276,7 +297,7 @@
   }
   
   .kit-selector label {
-    color: var(--text-color);
+    color: white;
     font-size: 13px;
     font-weight: 500;
     text-align: center;
@@ -308,5 +329,13 @@
   button:disabled, select:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+  
+  .tempo-label {
+    color: white;
+  }
+  
+  .tempo-value {
+    color: var(--primary-color);
   }
   
