@@ -1,4 +1,6 @@
 import { patternPresets } from './patternPresets.js';
+import { generateLinearPattern, generateRandomPattern } from './patternGenerator.js';
+import { timeSignatures } from './timeSignatures.js';
 
 // Handle preset selection and load the corresponding pattern if it matches the current time signature
 export const handlePresetSelect = (presetName, timeSignature, setPattern) => {
@@ -13,15 +15,12 @@ export const handlePresetSelect = (presetName, timeSignature, setPattern) => {
 export const handleLinearPattern = (isPlaying, timeSignature, measureCount, setPattern) => {
   if (isPlaying) return; // Don't change pattern while playing
   
-  const stepsPerMeasure = timeSignature === '4/4' ? 8 : 6;
-  const totalSteps = stepsPerMeasure * measureCount;
+  // Find the correct time signature object to get the proper beats
+  const timeSignatureObj = timeSignatures.find(ts => ts.id === timeSignature);
+  const beats = timeSignatureObj ? timeSignatureObj.beats : 4; // Default to 4 if not found
   
-  const newPattern = Array(5).fill().map((_, drumIndex) => {
-    return Array(totalSteps).fill().map((_, stepIndex) => {
-      // Create a simple linear pattern that progresses through each drum
-      return stepIndex % 5 === drumIndex;
-    });
-  });
+  // Use actual beats from time signature instead of hardcoded values
+  const newPattern = generateLinearPattern(beats, measureCount);
   
   setPattern(newPattern);
 };
@@ -31,14 +30,7 @@ export const handleRandomPattern = (isPlaying, timeSignature, measureCount, setP
   if (isPlaying) return; // Don't change pattern while playing
   
   const stepsPerMeasure = timeSignature === '4/4' ? 8 : 6;
-  const totalSteps = stepsPerMeasure * measureCount;
-  
-  const newPattern = Array(5).fill().map(() => {
-    return Array(totalSteps).fill().map(() => {
-      // 30% chance for each step to be active
-      return Math.random() < 0.3;
-    });
-  });
+  const newPattern = generateRandomPattern(stepsPerMeasure, measureCount);
   
   setPattern(newPattern);
 };
