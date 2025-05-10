@@ -24,39 +24,92 @@ export const generateRandomPattern = (beats = 4, measures = 1) => {
   return newPattern;
 };
 
-// Generate a linear pattern (with random hits)
+// Generate a random linear pattern (no simultaneous hits)
 export const generateLinearPattern = (beats = 4, measures = 1) => {
-  const totalSteps = beats * measures; // one step per beat
-  // Weight distribution for drums
-  const drumWeights = [0.35, 0.35, 0.25, 0.03, 0.02]; // kick, snare, hihat, crash, tom
-
-  // Create an empty pattern -- each drum has an array of steps initialized to false
-  const newPattern = Array.from({ length: drumWeights.length }, () => Array(totalSteps).fill(false));
-
-  for (let step = 0; step < totalSteps; step++) {
-    // For each beat (step), randomly choose one drum to activate using weighted probabilities
-    let randomThreshold = Math.random(); // Random value between 0 and 1
-    let selectedDrum = 0;
-    // Loop through weights to find the drum whose range contains randomThreshold
-    for (let i = 0; i < drumWeights.length; i++) {
-      if (randomThreshold < drumWeights[i]) {
-        selectedDrum = i;
-        break;
-      }
-      randomThreshold -= drumWeights[i];
+  // Calculate total number of steps in the pattern
+  const totalSteps = beats * measures;
+  const drumNames = ['kick', 'snare', 'hihat', 'crash', 'tom'];
+  const numDrums = drumNames.length;
+  
+  // Create empty pattern with all drums silent
+  // 2D array (row - drum; column - step)
+  //-> pattern[drumIndex][stepIndex] = true/false
+  const newPattern = Array(numDrums).fill().map(() => Array(totalSteps).fill(false));
+  
+  // Calculate how many steps will have drum hits
+  // 60-90% density to make it sound musical but not overwhelming
+  const density = 0.6 + (Math.random() * 0.3);
+  const numHits = Math.round(totalSteps * density);
+  
+  // Randomly elect which time positions will have drum hits (without duplicates)
+  const stepsWithHits = [];
+  while (stepsWithHits.length < numHits) {
+    const step = Math.floor(Math.random() * totalSteps);
+    // Avoid placing multiple hits on the same step
+    if (!stepsWithHits.includes(step)) {
+      stepsWithHits.push(step);
     }
-
-    // Set only the selected drum to true at the current step
-    newPattern.forEach((row, idx) => {
-      row[step] = idx === selectedDrum;
-    });
+  }
+  
+  // Sort the steps in chronological order to process them sequentially
+  stepsWithHits.sort((a, b) => a - b);
+  
+  // Define probability weights for each drum
+  // To make patterns sound more realistic by using drums in natural proportions
+  // (kicks and snares are more common than crashes and toms in typical drumming)
+  const drumProbs = {
+    kick: 0.35,   // (most common)
+    snare: 0.3,   // (next most common)
+    hihat: 0.25,  // (moderately common)
+    crash: 0.05,  // (rare)
+    tom: 0.05     // (rare)
+  };
+  
+  // Create a weighted selection array -- to pick drums based on their probabilities
+  // use an array where more common drums appear more frequently
+  const weightedDrums = [];
+  for (let i = 0; i < numDrums; i++) {
+    const drumName = drumNames[i];
+    // Convert % to count
+    const count = Math.round(drumProbs[drumName] * 100);
+    // Add  drums index to the array multiple times based on its weight
+    for (let j = 0; j < count; j++) {
+      weightedDrums.push(i);
+    }
   }
 
-  // Ensure the first beat starts with kick (row 0) or snare (row 1)
-  if (!newPattern[0][0] && !newPattern[1][0]) {
-    // 70% chance to choose kick, 30% chance to choose snare
-    newPattern[Math.random() < 0.7 ? 0 : 1][0] = true;
+  // Special case for the first beat (most patterns start with kick or snare)
+  if (stepsWithHits.includes(0)) {
+    // 80% chance kick, 20% chance snare on first beat
+    newPattern[Math.random() < 0.8 ? 0 : 1][0] = true;
+    // Remove first beat from steps to process
+    stepsWithHits.shift();
   }
-
+  
+  //Generate the sequence of drums for the remaining steps
+  // Keep track of the previous drum to avoid repetitive patterns
+  let prevDrum = -1;
+  
+  for (const step of stepsWithHits) {
+    // Try to avoid selecting the same drum that just played (more interesting patterns)
+    let selectedDrum;
+    let attempts = 0;
+    
+    do {
+      // Pick a random drum using weighted array to favor more common drums
+      selectedDrum = weightedDrums[Math.floor(Math.random() * weightedDrums.length)];
+      attempts++;
+      
+      // If can't find a different drum after several attempts -> accept the same drum rather than getting stuck in an infinite loop
+      if (attempts > 5) break;
+      
+    } while (selectedDrum === prevDrum);
+    
+    // Activate the selected drum at this step
+    newPattern[selectedDrum][step] = true;
+    // Remember this drum to avoid immediate repetition in the next step
+    prevDrum = selectedDrum;
+  }
+  
   return newPattern;
 };

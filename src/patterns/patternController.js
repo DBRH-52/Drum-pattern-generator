@@ -1,4 +1,5 @@
 import { patternPresets } from './patternPresets.js';
+import { generateLinearPattern, generateRandomPattern } from './patternGenerator.js';
 
 // Handle preset selection and load the corresponding pattern if it matches the current time signature
 export const handlePresetSelect = (presetName, timeSignature, setPattern) => {
@@ -14,14 +15,7 @@ export const handleLinearPattern = (isPlaying, timeSignature, measureCount, setP
   if (isPlaying) return; // Don't change pattern while playing
   
   const stepsPerMeasure = timeSignature === '4/4' ? 8 : 6;
-  const totalSteps = stepsPerMeasure * measureCount;
-  
-  const newPattern = Array(5).fill().map((_, drumIndex) => {
-    return Array(totalSteps).fill().map((_, stepIndex) => {
-      // Create a simple linear pattern that progresses through each drum
-      return stepIndex % 5 === drumIndex;
-    });
-  });
+  const newPattern = generateLinearPattern(stepsPerMeasure, measureCount);
   
   setPattern(newPattern);
 };
@@ -31,14 +25,7 @@ export const handleRandomPattern = (isPlaying, timeSignature, measureCount, setP
   if (isPlaying) return; // Don't change pattern while playing
   
   const stepsPerMeasure = timeSignature === '4/4' ? 8 : 6;
-  const totalSteps = stepsPerMeasure * measureCount;
-  
-  const newPattern = Array(5).fill().map(() => {
-    return Array(totalSteps).fill().map(() => {
-      // 30% chance for each step to be active
-      return Math.random() < 0.3;
-    });
-  });
+  const newPattern = generateRandomPattern(stepsPerMeasure, measureCount);
   
   setPattern(newPattern);
 };
