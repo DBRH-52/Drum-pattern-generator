@@ -29,6 +29,8 @@ export const useSequencer = (pattern, samplerRef, tempo) => {
     if (!isPlaying) {
       // Ensure Tone.js is started before playing (required by browser)
       await initializeAudio();
+      
+      // Skip loading check - allow play attempt even if files not loaded
       setIsPlaying(true);
       
       // Create the sequencer for the current pattern and tempo

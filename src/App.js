@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles/main.css';
 
 import DrumGrid from './components/DrumGrid/DrumGrid.js';
@@ -14,6 +14,8 @@ import { handlePresetSelect,
        } from './patterns/patternController.js';
 
 function App() {
+  const [audioInitialized, setAudioInitialized] = useState(false);
+
   const {
     pattern,
     currentTimeSignature,
@@ -34,7 +36,7 @@ function App() {
     currentKit,
     changeKit,
     setVolume,
-    setEffect
+    isInitialized
   } = useAudio();
 
   const {
@@ -43,6 +45,22 @@ function App() {
     handlePlayStop,
     stop
   } = useSequencer(pattern, samplerRef, tempo);
+
+  // Update audioInitialized state when isInitialized changes
+  useEffect(() => {
+    if (isInitialized) {
+      setAudioInitialized(true);
+    }
+  }, [isInitialized]);
+
+  const handleAudioInit = async () => {
+    await initializeAudio();
+    // Make a test sound to ensure audio is working
+    if (samplerRef.current) {
+      playSound(0); // Play the kick drum to test audio
+    }
+    setAudioInitialized(true);
+  };
 
   const handlePresetSelectClick = (presetName) => {
     handlePresetSelect(presetName, currentTimeSignature, setPattern);
@@ -57,6 +75,18 @@ function App() {
   return (
     <div className="App">
       <h1>Drum Pattern Generator</h1>
+      
+      {!audioInitialized && (
+        <div className="audio-init-overlay">
+          <button 
+            className="audio-init-button"
+            onClick={handleAudioInit}
+          >
+            Click to Enable Audio
+          </button>
+          <p>Audio must be enabled due to browser restrictions</p>
+        </div>
+      )}
       
       {/* Controls component, passing props related to tempo, time signature, measure count etc */}
       <Controls

@@ -10,6 +10,41 @@ export const useAudio = () => {
   const [currentKit, setCurrentKit] = useState('default');
   // Hold a ref to the sampler instance 
   const samplerRef = useRef(null);
+  // Volume control
+  const [volume, setVolumeState] = useState(0); // 0dB is default (no change)
+
+  // Force audio context to the correct state when component mounts
+  useEffect(() => {
+    const setupAudio = async () => {
+      // Try to resume the audio context if it's suspended
+      if (Tone.context.state !== 'running') {
+        console.log('Attempting to resume audio context...');
+        await Tone.context.resume();
+        
+        // After a small delay, check if we need to try other methods
+        setTimeout(async () => {
+          if (Tone.context.state !== 'running') {
+            console.log('Still not running, trying Tone.start()...');
+            try {
+              await Tone.start();
+              setIsInitialized(true);
+              console.log('Audio context started successfully!');
+            } catch (e) {
+              console.error('Failed to start audio context:', e);
+            }
+          } else {
+            setIsInitialized(true);
+            console.log('Audio context resumed successfully!');
+          }
+        }, 500);
+      } else {
+        setIsInitialized(true);
+        console.log('Audio context already running!');
+      }
+    };
+    
+    setupAudio();
+  }, []);
 
   // Initialize the sampler, when currentKit changes
   useEffect(() => {
@@ -18,18 +53,34 @@ export const useAudio = () => {
     
     // Clean up the sampler on kit change or component unmount
     return () => {
-      if (samplerRef.current) {
+      if (samplerRef.current && samplerRef.current.sampler && samplerRef.current.sampler.dispose) {
         // Dispose old samplers to free up resources
-        samplerRef.current.sampler.dispose();
+        try {
+          samplerRef.current.sampler.dispose();
+        } catch (e) {
+          console.error("Error disposing sampler:", e);
+        }
       }
     };
   }, [currentKit]);
 
+  // Set the volume level
+  const setVolume = (value) => {
+    setVolumeState(value);
+    Tone.Destination.volume.value = value; // Sets the master volume in decibels
+  };
+
   // Start Tone.js audio context if not already started
   const initializeAudio = async () => {
     if (!isInitialized) {
-      await Tone.start(); // Required by browsers to enable audio interaction
-      setIsInitialized(true);
+      try {
+        await Tone.start(); // Required by browsers to enable audio interaction
+        await Tone.context.resume();
+        setIsInitialized(true);
+        console.log("Audio initialized successfully!");
+      } catch (e) {
+        console.error("Error initializing audio:", e);
+      }
     }
     return true;
   };
@@ -53,6 +104,8 @@ export const useAudio = () => {
     currentKit,
     initializeAudio,
     playSound: handlePlaySound,
-    changeKit: handleKitChange
+    changeKit: handleKitChange,
+    setVolume,
+    volume
   };
 };
