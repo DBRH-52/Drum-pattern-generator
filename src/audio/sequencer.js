@@ -18,7 +18,14 @@ export const createSequence = (pattern, sampler, onStep, tempo) => {
       pattern.forEach((row, rowIndex) => {
         if (row[step]) { // If the step is active for the current instrument
           const notes = ['C2', 'D2', 'E2', 'F2', 'G2']; // Define the corresponding midi notes for each instrument
-          sampler.triggerAttackRelease(notes[rowIndex], '8n', time); // Play the note at the correct time
+          // trigger ONLY if sampler exists and is loaded
+          try {
+            if (sampler?.sampler) {
+              sampler.sampler.triggerAttackRelease(notes[rowIndex], '8n', time); // Play the note at the correct time
+            }
+          } catch (e) {
+            console.error("Error playing note:", e);
+          }
         }
       });
     },
