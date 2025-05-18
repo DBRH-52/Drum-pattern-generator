@@ -1,0 +1,104 @@
+.drum-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px auto;
+    max-width: 800px;
+    background-color: var(--background-color);
+    background-image: var(--grid-pattern);
+    background-size: var(--grid-size) var(--grid-size);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .drum-row, .beat-numbers, .measure-indicators {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .drum-label {
+    width: 70px;
+    min-width: 70px;
+    text-align: right;
+    padding-right: 10px;
+    color: var(--text-color);
+    font-weight: bold;
+  }
+  
+  .drum-cell {
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--grid-color);
+    background-color: var(--grid-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .drum-cell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.03) 75%, transparent 75%, transparent);
+    background-size: 10px 10px;
+    opacity: 0.2;
+  }
+  
+  .drum-cell:hover {
+    background-color: var(--hover-color);
+    border-color: var(--hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .drum-cell.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: var(--primary-glow);
+  }
+  
+  .drum-cell.current {
+    box-shadow: 0 0 10px var(--accent-color);
+  }
+  
+  .beat-number {
+    width: 50px;
+    height: 20px;
+    text-align: center;
+    color: var(--text-color);
+    font-weight: bold;
+  }
+  
+  .measure-start {
+    position: relative;
+  }
+  
+  .measure-start::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 0;
+    height: 100%;
+    border-left: 2px solid var(--accent-color);
+    box-shadow: 0 0 5px rgba(255, 106, 0, 0.3);
+  }
+  
+  .measure-label {
+    text-align: center;
+    color: var(--text-color);
+    font-weight: bold;
+    padding: 5px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+  }
+  

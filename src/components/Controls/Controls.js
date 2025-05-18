@@ -1,5 +1,8 @@
 import React from 'react';
 import ControlsView from './ControlsView';
+import { timeSignatures } from '../../patterns/timeSignatures';
+import { patternPresets } from '../../patterns/patternPresets';
+import { MIN_TEMPO, MAX_TEMPO, MIN_MEASURES, MAX_MEASURES } from '../../utils/constants';
 
 const Controls = ({
   tempo,
